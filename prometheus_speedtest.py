@@ -2,6 +2,7 @@
 
 import argparse
 import socket
+import threading
 
 import prometheus_client
 import speedtest
@@ -12,7 +13,7 @@ PARSER.add_argument(
     '-s', '--source_address', metavar='addr', type=str,
     help='IP address for speedtest to bind to.')
 PARSER.add_argument(
-    '-t', '--timeout', metavar='sec', default=10, type=int,
+    '-t', '--timeout', metavar='sec', default=30, type=int,
     help='Speedtest timeout, seconds.')
 PARSER.add_argument(
     '-p', '--pushgateway', metavar='host:port', default='localhost:9091',
@@ -20,6 +21,14 @@ PARSER.add_argument(
 PARSER.add_argument(
     '-n', '--name', metavar='name', default='prometheus_speedtest', type=str,
     help='Job name to report Prometheus metrics as.')
+
+
+class Error(Exception):
+  """Base class for exceptions raised in this module."""
+
+
+class TimeoutError(Exception):
+  """Speedtest timeout."""
 
 
 class PrometheusSpeedtest(object):
@@ -47,12 +56,22 @@ class PrometheusSpeedtest(object):
 
     Returns:
       speedtest.SpeedtestResults object.
+    Raises:
+      TimeoutError: Speedtest timeout was reached.
     """
-    client = speedtest.Speedtest(source_address=self.source_address,
-                                 timeout=self.timeout)
-    client.get_best_server()
-    client.download()
-    client.upload()
+    client = speedtest.Speedtest(source_address=self.source_address)
+
+    def perform_test(client):
+      """Performs speedtest."""
+      client.get_best_server()
+      client.download()
+      client.upload()
+
+    thread = threading.Thread(target=perform_test, args=(client,))
+    thread.start()
+    thread.join(self.timeout)
+    if thread.is_alive():
+      raise TimeoutError('Speedtest timeout')
     return client.results
 
   def _push(self, results):
