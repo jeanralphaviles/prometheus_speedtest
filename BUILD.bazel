@@ -17,6 +17,17 @@ par_binary(
     ],
 )
 
+py_test(
+    name = "prometheus_speedtest_test",
+    srcs = ["prometheus_speedtest_test.py"],
+    deps = [
+        "//:prometheus_speedtest",
+        requirement("mock"),
+        requirement("prometheus_client"),
+        requirement("speedtest-cli"),
+    ],
+)
+
 pkg_tar(
     name = "debian-data",
     srcs = [

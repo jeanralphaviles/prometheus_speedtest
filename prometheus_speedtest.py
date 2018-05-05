@@ -71,6 +71,7 @@ class PrometheusSpeedtest(object):
     thread.start()
     thread.join(self.timeout)
     if thread.is_alive():
+      thread.exit()
       raise TimeoutError('Speedtest timeout')
     return client.results
 
