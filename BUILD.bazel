@@ -1,3 +1,5 @@
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar", "pkg_deb")
+load("@subpar//:subpar.bzl", "par_binary")
 load(
     "@io_bazel_rules_python//python:python.bzl",
     "py_binary",
@@ -6,11 +8,29 @@ load(
 )
 load("@pip_deps//:requirements.bzl", "requirement")
 
-py_binary(
+par_binary(
     name = "prometheus_speedtest",
     srcs = ["prometheus_speedtest.py"],
     deps = [
         requirement("prometheus_client"),
         requirement("speedtest-cli"),
     ],
+)
+
+pkg_tar(
+    name = "debian-data",
+    srcs = [
+        "//:prometheus_speedtest.par",
+    ],
+    mode = "0755",
+    package_dir = "/usr/bin",
+)
+
+pkg_deb(
+    name = "prometheus_speedtest-debian",
+    data = ":debian-data",
+    description_file = ":description.txt",
+    maintainer = "Jean-Ralph Aviles <jr@jraviles.com>",
+    package = "prometheus_speedtest",
+    version_file = ":version.txt",
 )
