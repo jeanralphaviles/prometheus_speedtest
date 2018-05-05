@@ -9,7 +9,9 @@ PARSER = argparse.ArgumentParser(
     description='Export speedtest metrics to Prometheus Pushgateway.')
 PARSER.add_argument('-s', '--source_address', metavar='ADDR', type=str)
 PARSER.add_argument('-t', '--timeout', metavar='SEC', default=10, type=int)
-PARSER.add_argument('-p', '--pushgateway', default='localhost:9091', type=str)
+PARSER.add_argument(
+    '-p', '--pushgateway', metavar='HOST:PORT', default='localhost:9091',
+    type=str)
 PARSER.add_argument('-n', '--name', default='prometheus_speedtest', type=str)
 
 
