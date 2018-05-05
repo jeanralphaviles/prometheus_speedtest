@@ -8,12 +8,18 @@ import speedtest
 
 PARSER = argparse.ArgumentParser(
     description='Export speedtest metrics to Prometheus Pushgateway.')
-PARSER.add_argument('-s', '--source_address', metavar='ADDR', type=str)
-PARSER.add_argument('-t', '--timeout', metavar='SEC', default=10, type=int)
 PARSER.add_argument(
-    '-p', '--pushgateway', metavar='HOST:PORT', default='localhost:9091',
-    type=str)
-PARSER.add_argument('-n', '--name', default='prometheus_speedtest', type=str)
+    '-s', '--source_address', metavar='addr', type=str,
+    help='IP address for speedtest to bind to.')
+PARSER.add_argument(
+    '-t', '--timeout', metavar='sec', default=10, type=int,
+    help='Speedtest timeout, seconds.')
+PARSER.add_argument(
+    '-p', '--pushgateway', metavar='host:port', default='localhost:9091',
+    type=str, help='Address of Prometheus Pushgateway.')
+PARSER.add_argument(
+    '-n', '--name', metavar='name', default='prometheus_speedtest', type=str,
+    help='Job name to report Prometheus metrics as.')
 
 
 class PrometheusSpeedtest(object):
