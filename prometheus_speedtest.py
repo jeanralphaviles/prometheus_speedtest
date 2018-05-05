@@ -63,6 +63,9 @@ class PrometheusSpeedtest(object):
     upload_bps = prometheus_client.Gauge(
         'upload_speed_bps', 'Upload speed (bit/s)', registry=registry)
     upload_bps.set(results.upload)
+    ping = prometheus_client.Gauge(
+        'ping_ms', 'Latency (ms)', registry=registry)
+    ping.set(results.ping)
 
     grouping_key = {
         'instance': socket.gethostname(),
