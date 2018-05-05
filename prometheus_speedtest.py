@@ -1,6 +1,7 @@
 """Performs speedtest-cli tests and pushes results to Prometheus Pushgateway."""
 
 import argparse
+import socket
 
 import prometheus_client
 import speedtest
@@ -62,8 +63,14 @@ class PrometheusSpeedtest(object):
     upload_bps = prometheus_client.Gauge(
         'upload_speed_bps', 'Upload speed (bit/s)', registry=registry)
     upload_bps.set(results.upload)
+
+    grouping_key = {
+        'instance': socket.gethostname(),
+    }
+
     prometheus_client.push_to_gateway(
-        self.pushgateway, job=self.jobname, registry=registry)
+        self.pushgateway, job=self.jobname, grouping_key=grouping_key,
+        registry=registry)
 
   def report(self):
     """Performs a speedtest and pushes metrics to Prometheus Pushgateway."""
