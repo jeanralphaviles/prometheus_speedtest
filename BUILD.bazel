@@ -1,14 +1,16 @@
-load("@io_bazel_rules_python//python:python.bzl",
-     "py_binary",
-     "py_library",
-     "py_test",
+load(
+    "@io_bazel_rules_python//python:python.bzl",
+    "py_binary",
+    "py_library",
+    "py_test",
 )
 load("@pip_deps//:requirements.bzl", "requirement")
 
 py_binary(
-  name = "prometheus_speedtest",
-  srcs = ["prometheus_speedtest.py"],
-  deps = [
-		requirement("speedtest-cli")
-  ],
+    name = "prometheus_speedtest",
+    srcs = ["prometheus_speedtest.py"],
+    deps = [
+        requirement("prometheus_client"),
+        requirement("speedtest-cli"),
+    ],
 )
