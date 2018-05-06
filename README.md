@@ -3,6 +3,8 @@
 Performs [Speedtest.net](http://speedtest.net) tests and pushes their results
 to Prometheus Pushgateway.
 
+[![PyPI status](https://img.shields.io/pypi/status/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/) [![PyPI version shields.io](https://img.shields.io/pypi/v/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/) [![PyPI license](https://img.shields.io/pypi/l/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/) [![PyPI pyversions](https://img.shields.io/pypi/pyversions/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
+
 ## Getting Started
 
 These instructions will install `prometheus_speedtest` on your system.
