@@ -21,14 +21,13 @@ pip install prometheus_speedtest
 ### Running
 
 ```
-prometheus_speedtest.par
+prometheus_speedtest
 ```
 
 ### Usage
 
 ```
-usage: prometheus_speedtest.par [-h] [-s addr] [-t sec] [-p host:port]
-                                [-n name]
+usage: prometheus_speedtest [-h] [-s addr] [-t sec] [-p host:port] [-n name]
 
 Export speedtest metrics to Prometheus Pushgateway.
 
@@ -53,6 +52,7 @@ how to deploy the project on a live system.
 
 * [Python 2.7 - 3.6](https://www.python.org)
 * [Bazel](https://bazel.build)
+* [Twine](https://github.com/pypa/twine)
 
 ### Compiling
 
@@ -77,6 +77,13 @@ Pull requests welcome. Please adhere to the
 
 ### Deploying
 
+#### pypi
+
+```
+python3 setup.py sdist
+twine upload dist/*
+```
+
 #### par\_binary
 
 ```
@@ -92,6 +99,7 @@ documentation on Python `.par` files.
 ```
 bazel build //:prometheus_speedtest-debian
 sudo apt install "$(bazel info bazel-bin)/prometheus_speedtest-debian.deb"
+/usr/bin/prometheus_speedtest.par
 ```
 
 If reinstalling package, remember to increment the number in `version.txt`.
