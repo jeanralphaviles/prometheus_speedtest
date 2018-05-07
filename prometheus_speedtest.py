@@ -13,7 +13,7 @@ PARSER.add_argument(
     '-s', '--source_address', metavar='addr', type=str,
     help='IP address for speedtest to bind to.')
 PARSER.add_argument(
-    '-t', '--timeout', metavar='sec', default=30, type=int,
+    '-t', '--timeout', metavar='sec', default=60, type=int,
     help='Speedtest timeout, seconds.')
 PARSER.add_argument(
     '-p', '--pushgateway', metavar='host:port', default='localhost:9091',
