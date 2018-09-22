@@ -7,11 +7,24 @@ load(
     "py_test",
 )
 load("@pip_deps//:requirements.bzl", "requirement")
+load("@io_bazel_rules_docker//python:image.bzl", "py_image")
 
 par_binary(
     name = "prometheus_speedtest",
     srcs = ["prometheus_speedtest.py"],
     data = glob(["static/*"]),
+    deps = [
+        requirement("glog"),
+        requirement("prometheus_client"),
+        requirement("speedtest-cli"),
+    ],
+)
+
+py_image(
+    name = "prometheus_speedtest_image",
+    srcs = ["prometheus_speedtest.py"],
+    data = glob(["static/*"]),
+    main = "prometheus_speedtest.py",
     deps = [
         requirement("glog"),
         requirement("prometheus_client"),
