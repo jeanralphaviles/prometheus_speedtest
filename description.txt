@@ -1,1 +1,1 @@
-Performs speedtest-cli tests and pushes metrics to Prometheus Pushgateway.
+Instrument speedtest.net speedtests from Prometheus.

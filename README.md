@@ -1,7 +1,6 @@
 # Prometheus Speedtest
 
-Performs [Speedtest.net](http://speedtest.net) tests and pushes their results
-to Prometheus Pushgateway.
+Instrument [Speedtest.net](http://speedtest.net) tests from Prometheus.
 
 [![PyPI status](https://img.shields.io/pypi/status/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/) [![PyPI version shields.io](https://img.shields.io/pypi/v/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/) [![PyPI license](https://img.shields.io/pypi/l/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/) [![PyPI pyversions](https://img.shields.io/pypi/pyversions/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
 
@@ -11,7 +10,7 @@ These instructions will install `prometheus_speedtest` on your system.
 
 ### Prerequisites
 
-* [Python 2.7 - 3.6](https://www.python.org)
+* [Python 2.7](https://www.python.org)
 * [python-pip](https://packaging.python.org/tutorials/installing-packages)
 
 ### Installing
@@ -29,19 +28,14 @@ prometheus_speedtest
 ### Usage
 
 ```
-usage: prometheus_speedtest [-h] [-s addr] [-t sec] [-p host:port] [-n name]
+usage: prometheus_speedtest.py [-h] [-p port]
 
-Export speedtest metrics to Prometheus Pushgateway.
+Instrument speedtest.net speedtests from Prometheus.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -s addr, --source_address addr
-                        IP address for speedtest to bind to.
-  -t sec, --timeout sec
-                        Speedtest timeout, seconds.
-  -p host:port, --pushgateway host:port
-                        Address of Prometheus Pushgateway.
-  -n name, --name name  Job name to report Prometheus metrics as.
+  -p port, --port port  port to listen on.
+
 ```
 
 ## Getting Started (Development)
@@ -52,7 +46,7 @@ how to deploy the project on a live system.
 
 ### Prerequisites
 
-* [Python 2.7 - 3.6](https://www.python.org)
+* [Python 2.7](https://www.python.org)
 * [Bazel](https://bazel.build)
 * [Twine](https://github.com/pypa/twine)
 
@@ -62,14 +56,38 @@ how to deploy the project on a live system.
 bazel build //:prometheus_speedtest
 ```
 
-### Running
+### Running with Bazel
+
 ```
 bazel run //:prometheus_speedtest
 ```
 
-### Testing
+### Running without Bazel
+
+First, ensure packages listed in requirements.txt are installed with pip.
+
+```
+python2 prometheus_speedtest.py
+```
+
+### Perform a Speedtest
+
+```
+curl localhost:8080/probe
+```
+
+Or visit http://localhost:8080
+
+### Testing with Bazel
+
 ```
 bazel test //:prometheus_speedtest_test
+```
+
+### Testing without Bazel
+
+```
+python2 prometheus_speedtest_test.py
 ```
 
 ### Contributing
@@ -82,7 +100,7 @@ Pull requests welcome. Please adhere to the
 #### pypi
 
 ```
-python3 setup.py sdist
+python2 setup.py sdist
 twine upload dist/*
 ```
 
@@ -122,3 +140,4 @@ file for details.
 * Matt Martz [speedtest-cli](https://github.com/sivel/speedtest-cli)
 * The Prometheus team <https://prometheus.io>
 * Testing in Python team <http://lists.idyll.org/listinfo/testing-in-python>
+* Benjamin Staffin [python-glog](https://github.com/benley/python-glog)

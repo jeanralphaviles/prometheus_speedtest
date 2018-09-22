@@ -1,4 +1,4 @@
-load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar", "pkg_deb")
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_deb", "pkg_tar")
 load("@subpar//:subpar.bzl", "par_binary")
 load(
     "@io_bazel_rules_python//python:python.bzl",
@@ -11,7 +11,9 @@ load("@pip_deps//:requirements.bzl", "requirement")
 par_binary(
     name = "prometheus_speedtest",
     srcs = ["prometheus_speedtest.py"],
+    data = glob(["static/*"]),
     deps = [
+        requirement("glog"),
         requirement("prometheus_client"),
         requirement("speedtest-cli"),
     ],
