@@ -118,7 +118,7 @@ Pull requests welcome. Please adhere to the
 #### pypi
 
 ```
-python2 setup.py sdist
+python3 setup.py sdist
 twine upload dist/*
 ```
 
