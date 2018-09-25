@@ -3,12 +3,12 @@
 import BaseHTTPServer
 import argparse
 import multiprocessing
+import traceback
 import urlparse
 
-import glog as log
 import prometheus_client
-
 import speedtest
+import glog as log
 
 PARSER = argparse.ArgumentParser(
     description='Instrument speedtest.net speedtests from Prometheus.')
@@ -59,10 +59,12 @@ class PrometheusSpeedtest(object):
     """
     pool = multiprocessing.Pool(processes=1)
     async_result = pool.apply_async(_perform_test, args=(self.source_address,))
+    pool.close()
     try:
       speedtest_client = async_result.get(self.timeout)
       return speedtest_client.results
     except multiprocessing.TimeoutError:
+      traceback.print_exc()
       raise TimeoutError('Speedtest timeout')
 
   def _metrics(self, results):
@@ -118,7 +120,7 @@ class HTTPHandler(prometheus_client.MetricsHandler):
       try:
         self.registry = tester.report()
       except Exception as e:
-        log.error(e)
+        traceback.print_exc()
         self.send_response(500)
         self.end_headers()
         log.warn('Response code 500')
