@@ -2,27 +2,34 @@
 
 Instrument [Speedtest.net](http://speedtest.net) tests from Prometheus.
 
-[![PyPI status](https://img.shields.io/pypi/status/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/) [![PyPI version shields.io](https://img.shields.io/pypi/v/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/) [![PyPI license](https://img.shields.io/pypi/l/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/) [![PyPI pyversions](https://img.shields.io/pypi/pyversions/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
+[![Docker Build Status](https://img.shields.io/docker/build/jraviles/prometheus_speedtest.svg)](https://hub.docker.com/r/jraviles/prometheus_speedtest/)
+[![PyPI status](https://img.shields.io/pypi/status/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
+[![PyPI license](https://img.shields.io/pypi/l/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
+
 
 ## Getting Started
 
-These instructions will install `prometheus_speedtest` on your system.
+These instructions will run `prometheus_speedtest` on your system.
 
-### Prerequisites
+### Running with Docker
 
-* [Python 2.7](https://www.python.org)
-* [python-pip](https://packaging.python.org/tutorials/installing-packages)
+prometheus\_speedtest is available on
+[Docker Hub](https://hub.docker.com/r/jraviles/prometheus_speedtest) :whale:.
 
-### Installing
+```
+docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp jraviles/prometheus_speedtest:latest
+```
+
+### Installing with PyPi
+
+prometheus\_speedtest is also provided as a
+[PyPi package](https://pypi.org/project/prometheus_speedtest). It can be
+installed with:
 
 ```
 pip install prometheus_speedtest
-```
-
-### Running
-
-```
-prometheus_speedtest
 ```
 
 ### Usage
