@@ -8,6 +8,8 @@ Instrument [Speedtest.net](http://speedtest.net) tests from Prometheus.
 [![PyPI license](https://img.shields.io/pypi/l/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
 
+![Grafana](https://github.com/jeanralphaviles/prometheus_speedtest/raw/master/images/grafana.png)
+
 
 ## Getting Started
 
