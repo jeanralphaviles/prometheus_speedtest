@@ -1,3 +1,4 @@
+#!/usr/bin/python2
 """Tests prometheus_speedtest.py."""
 
 import collections

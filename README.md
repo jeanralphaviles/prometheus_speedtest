@@ -56,23 +56,10 @@ how to deploy the project on a live system.
 ### Prerequisites
 
 * [Python 2.7](https://www.python.org)
-* [Bazel](https://bazel.build)
 * [Docker](https://www.docker.com)
 * [Twine](https://github.com/pypa/twine)
 
-### Compiling with Bazel
-
-```
-bazel build //:prometheus_speedtest
-```
-
-### Running with Bazel
-
-```
-bazel run //:prometheus_speedtest
-```
-
-### Running without Bazel
+### Running locally
 
 First, ensure packages listed in requirements.txt are installed with pip.
 
@@ -81,16 +68,6 @@ python2 prometheus_speedtest.py
 ```
 
 ### Running with Docker
-
-1. Using Bazel-Docker integration
-
-[Documentation](https://github.com/bazelbuild/rules_docker)
-
-```
-bazel run //:prometheus_speedtest_image
-```
-
-2. Raw Docker
 
 ```
 docker build -t prometheus_speedtest:latest .
@@ -105,13 +82,7 @@ curl localhost:8080/probe
 
 Or visit http://localhost:8080
 
-### Testing with Bazel
-
-```
-bazel test //:prometheus_speedtest_test
-```
-
-### Testing without Bazel
+### Testing 
 
 ```
 python2 prometheus_speedtest_test.py
@@ -130,28 +101,6 @@ Pull requests welcome. Please adhere to the
 python3 setup.py sdist
 twine upload dist/*
 ```
-
-#### par\_binary
-
-```
-bazel build //:prometheus_speedtest.par
-cp "$(bazel info bazel-bin)/prometheus_speedtest.par" ...
-```
-
-See <https://github.com/google/subpar> or <https://google.github.io/subpar> for
-documentation on Python `.par` files.
-
-#### Debian package
-
-```
-bazel build //:prometheus_speedtest-debian
-sudo apt install "$(bazel info bazel-bin)/prometheus_speedtest-debian.deb"
-/usr/bin/prometheus_speedtest.par
-```
-
-If reinstalling package, remember to increment the number in `version.txt`.
-Otherwise apt will believe the package hasn't changed and will refuse to
-install a new version.
 
 ## Authors
 

@@ -1,3 +1,4 @@
+#!/usr/bin/python2
 """Instrument speedtest.net speedtests from Prometheus."""
 
 import BaseHTTPServer
