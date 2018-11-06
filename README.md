@@ -44,7 +44,6 @@ Instrument speedtest.net speedtests from Prometheus.
 optional arguments:
   -h, --help            show this help message and exit
   -p port, --port port  port to listen on.
-
 ```
 
 ## Getting Started (Development)
@@ -55,7 +54,7 @@ how to deploy the project on a live system.
 
 ### Prerequisites
 
-* [Python 2.7](https://www.python.org)
+* [Python 3.7](https://www.python.org)
 * [Docker](https://www.docker.com)
 * [Twine](https://github.com/pypa/twine)
 
@@ -77,7 +76,7 @@ docker run --rm -d -p 8080:8080/tcp prometheus_speedtest:latest
 ### Perform a Speedtest
 
 ```
-curl localhost:8080/probe
+curl localhost:8080
 ```
 
 Or visit http://localhost:8080

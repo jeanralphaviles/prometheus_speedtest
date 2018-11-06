@@ -1,7 +1,5 @@
-FROM python:2
-MAINTAINER Jean-Ralph Aviles
+FROM python:3.7
 
-COPY static /static
 COPY prometheus_speedtest.py /
 COPY requirements.txt /
 

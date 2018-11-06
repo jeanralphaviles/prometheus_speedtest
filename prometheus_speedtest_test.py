@@ -1,11 +1,11 @@
-#!/usr/bin/python2
+#!/usr/bin/python3.7
 """Tests prometheus_speedtest.py."""
 
 import collections
-import multiprocessing
 import unittest
 
 import mock
+import prometheus_client
 import speedtest
 
 import prometheus_speedtest
@@ -16,46 +16,41 @@ class PrometheusSpeedtestTest(unittest.TestCase):
 
   _results = collections.namedtuple('Results', ['download', 'upload', 'ping'])
 
-  @mock.patch.object(multiprocessing, 'Pool')
   @mock.patch.object(speedtest, 'Speedtest', autospec=True)
-  def test_test(self, mock_speedtest, mock_pool):
-    tester = prometheus_speedtest.PrometheusSpeedtest(source_address='4.3.2.1')
-
+  def test_test(self, mock_speedtest):
+    tester = prometheus_speedtest.PrometheusSpeedtest(
+        source_address='4.3.2.1', timeout=10)
 
     expected = PrometheusSpeedtestTest._results(10, 5, 30)
-    mock_pool.return_value.apply_async.return_value.get.return_value = (
-        prometheus_speedtest._perform_test('4.3.2.1'))
     mock_speedtest.return_value.results = expected
 
-    self.assertEqual(tester._test(), expected)
+    self.assertEqual(tester.test(), expected)
 
-    mock_speedtest.assert_called_once_with(source_address='4.3.2.1')
+    mock_speedtest.assert_called_once_with(source_address='4.3.2.1', timeout=10)
     mock_speedtest.return_value.get_best_server.assert_called_once_with()
     mock_speedtest.return_value.download.assert_called_once_with()
     mock_speedtest.return_value.upload.assert_called_once_with()
 
-  @mock.patch.object(multiprocessing, 'Pool')
-  def test_testTimeout(self, mock_pool):
-    tester = prometheus_speedtest.PrometheusSpeedtest(None, timeout=1)
 
-    mock_async_result = mock.MagicMock()
-    mock_pool.return_value.apply_async.return_value = mock_async_result
-    mock_async_result.get.side_effect = multiprocessing.TimeoutError
+class SpeedtestCollectorTest(unittest.TestCase):
+  """Tests prometheus_speedtest.SpeedtestCollector."""
 
-    self.assertRaises(prometheus_speedtest.TimeoutError, tester._test)
-    mock_async_result.get.assert_called_with(1)
+  _results = collections.namedtuple(
+      'Results', ['download', 'upload', 'ping', 'bytes_received', 'bytes_sent'])
 
-  @mock.patch.object(prometheus_speedtest.PrometheusSpeedtest, '_metrics')
-  @mock.patch.object(prometheus_speedtest.PrometheusSpeedtest, '_test')
-  def test_report(self, mock_test, mock_metrics):
-    tester = prometheus_speedtest.PrometheusSpeedtest()
-    results = PrometheusSpeedtestTest._results(10, 5, 30)
+  @mock.patch.object(prometheus_client.core.GaugeMetricFamily, 'add_metric')
+  def test_collect(self, mock_metric):
+    mock_tester = mock.create_autospec(prometheus_speedtest.PrometheusSpeedtest)
+    collector = prometheus_speedtest.SpeedtestCollector(mock_tester)
 
-    mock_test.return_value = results
+    speedtest_results = [10, 5, 30, 100, 20]
+    mock_tester.test.return_value = SpeedtestCollectorTest._results(
+        *speedtest_results)
 
-    tester.report()
+    collections.deque(collector.collect())
 
-    mock_metrics.assert_called_once_with(results)
+    mock_metric.assert_has_calls(
+        [mock.call(labels=[], value=value) for value in speedtest_results])
 
 
 if __name__ == '__main__':

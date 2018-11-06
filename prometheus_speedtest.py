@@ -1,15 +1,13 @@
-#!/usr/bin/python2
+#!/usr/bin/python3.7
 """Instrument speedtest.net speedtests from Prometheus."""
 
-import BaseHTTPServer
 import argparse
-import multiprocessing
-import traceback
-import urlparse
+import http
 
+import glog as logging
 import prometheus_client
+from prometheus_client import core
 import speedtest
-import glog as log
 
 PARSER = argparse.ArgumentParser(
     description='Instrument speedtest.net speedtests from Prometheus.')
@@ -18,28 +16,10 @@ PARSER.add_argument(
     help='port to listen on.')
 
 
-class Error(Exception):
-  """Base class for exceptions raised in this module."""
-
-
-class TimeoutError(Exception):
-  """Speedtest timeout."""
-
-
-# Global function for multiprocessing library.
-def _perform_test(source_address):
-  """Performs a speedtest."""
-  client = speedtest.Speedtest(source_address=source_address)
-  client.get_best_server()
-  client.download()
-  client.upload()
-  return client
-
-
 class PrometheusSpeedtest(object):
   """Enapsulates behavior performing and reporting results of speedtests."""
 
-  def __init__(self, source_address=None, timeout=60):
+  def __init__(self, source_address=None, timeout=10):
     """Instantiates a PrometheusSpeedtest object.
 
     Args:
@@ -47,10 +27,10 @@ class PrometheusSpeedtest(object):
         e.g. 192.168.1.1.
       timeout: int - optional timeout for speedtest in seconds.
     """
-    self.source_address = source_address
-    self.timeout = int(timeout)
+    self._source_address = source_address
+    self._timeout = timeout
 
-  def _test(self):
+  def test(self):
     """Performs speedtest, returns results.
 
     Returns:
@@ -58,91 +38,65 @@ class PrometheusSpeedtest(object):
     Raises:
       TimeoutError: Speedtest timeout was reached.
     """
-    pool = multiprocessing.Pool(processes=1)
-    async_result = pool.apply_async(_perform_test, args=(self.source_address,))
-    pool.close()
-    try:
-      speedtest_client = async_result.get(self.timeout)
-      return speedtest_client.results
-    except multiprocessing.TimeoutError:
-      traceback.print_exc()
-      raise TimeoutError('Speedtest timeout')
+    logging.info('Performing Speedtest')
+    client = speedtest.Speedtest(
+        source_address=self._source_address, timeout=self._timeout)
+    client.get_best_server()
+    client.download()
+    client.upload()
+    logging.info(client.results)
+    return client.results
 
-  def _metrics(self, results):
-    """Produces Prometheus metrics from Speedtest results.
+
+class SpeedtestCollector(object):
+  """Performs Speedtests when requested from Prometheus."""
+
+  def __init__(self, tester=None):
+    """Instantiates a SpeedtestCollector object.
 
     Args:
-      results: speedtest.SpeedtestResults object.
-    Returns:
-      prometheus_client.CollectorRegistry containing metrics.
+      tester: An instantiated PrometheusSpeedtest object for testing.
     """
-    registry = prometheus_client.CollectorRegistry()
-    download_bps = prometheus_client.Gauge(
-        'download_speed_bps', 'Download speed (bit/s)',
-        registry=registry)
-    download_bps.set(results.download)
-    upload_bps = prometheus_client.Gauge(
-        'upload_speed_bps', 'Upload speed (bit/s)', registry=registry)
-    upload_bps.set(results.upload)
-    ping = prometheus_client.Gauge(
-        'ping_ms', 'Latency (ms)', registry=registry)
-    ping.set(results.ping)
-    bytes_sent = prometheus_client.Gauge(
-        'bytes_sent', 'Bytes sent during test', registry=registry)
-    bytes_sent.set(results.bytes_sent)
-    bytes_received = prometheus_client.Gauge(
-        'bytes_received', 'Bytes received during test', registry=registry)
-    bytes_received.set(results.bytes_received)
+    self._tester = tester if tester else PrometheusSpeedtest()
 
-    return registry
+  def collect(self):
+    """Collects Speedtest metrics."""
+    results = self._tester.test()
 
-  def report(self):
-    """Performs a speedtest and returns Prometheus metrics.
+    download_speed = core.GaugeMetricFamily(
+        'download_speed_bps', 'Download speed (bit/s)')
+    download_speed.add_metric(labels=[], value=results.download)
+    yield download_speed
 
-    Returns:
-      prometheus_client.CollectorRegistry containing metrics.
-    """
-    results = self._test()
-    return self._metrics(results)
+    upload_speed = core.GaugeMetricFamily(
+        'upload_speed_bps', 'Upload speed (bit/s)')
+    upload_speed.add_metric(labels=[], value=results.upload)
+    yield upload_speed
 
+    ping = core.GaugeMetricFamily('ping_ms', 'Latency (ms)')
+    ping.add_metric(labels=[], value=results.ping)
+    yield ping
 
-class HTTPHandler(prometheus_client.MetricsHandler):
-  """Handles HTTP Requests."""
+    bytes_received = core.GaugeMetricFamily(
+        'bytes_received', 'Bytes received during test')
+    bytes_received.add_metric(labels=[], value=results.bytes_received)
+    yield bytes_received
 
-  def do_GET(self):
-    """Handles HTTP Get requests."""
-    log.info('Handling request "%s"', self.path)
-    if self.path.startswith('/probe'):
-      params = {
-          k: v[0] for k, v in
-          urlparse.parse_qs(urlparse.urlparse(self.path).query).items()
-      }
-      tester = PrometheusSpeedtest(**params)
-      try:
-        self.registry = tester.report()
-      except Exception as e:
-        traceback.print_exc()
-        self.send_response(500)
-        self.end_headers()
-        log.warn('Response code 500')
-        return
-      prometheus_client.MetricsHandler.do_GET(self)
-      log.info('Response code 200')
-    else:
-      with open('static/usage.html', 'r') as f:
-        self.send_response(200)
-        self.send_header('Content-Type', 'text/html')
-        self.send_header('Content-Length', len(f.read()))
-        self.end_headers()
-        f.seek(0)
-        self.wfile.write(f.read())
+    bytes_sent = core.GaugeMetricFamily('bytes_sent', 'Bytes sent during test')
+    bytes_sent.add_metric(labels=[], value=results.bytes_sent)
+    yield bytes_sent
 
 
 def main():
   """Entry point for prometheus_speedtest.py."""
   flags = PARSER.parse_args()
-  server = BaseHTTPServer.HTTPServer(('', flags.port), HTTPHandler)
-  log.info('Listening on port %s', flags.port)
+
+  registry = core.CollectorRegistry(auto_describe=False)
+  registry.register(SpeedtestCollector())
+  metrics_handler = prometheus_client.MetricsHandler.factory(registry)
+
+  logging.info('Starting HTTP server on port %s', flags.port)
+  server = http.server.ThreadingHTTPServer(('', flags.port), metrics_handler)
   server.serve_forever()
 
 
