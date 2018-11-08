@@ -3,6 +3,7 @@
 
 from __future__ import print_function
 
+import os
 from absl import app
 from absl import flags
 from absl import logging
@@ -14,11 +15,15 @@ from . import version
 
 try:
     from http.server import HTTPServer
+    from http.server import SimpleHTTPRequestHandler
     from socketserver import ThreadingMixIn
+    from urllib.parse import urlparse
 except ImportError:
     # Python 2
     from BaseHTTPServer import HTTPServer
+    from SimpleHTTPServer import SimpleHTTPRequestHandler
     from SocketServer import ThreadingMixIn
+    from urlparse import urlparse
 
 flags.DEFINE_string('address', '0.0.0.0', 'address to listen on')
 flags.DEFINE_integer('port', 9516, 'port to listen on')
@@ -110,6 +115,22 @@ class _ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
 
 
+class SpeedtestMetricsHandler(SimpleHTTPRequestHandler,
+                              prometheus_client.MetricsHandler):
+    """HTTP handler extending MetricsHandler and adding status page support."""
+    def do_GET(self):
+        """Handles HTTP GET requests.
+
+        Requests to '/probe' are handled by prometheus_client.MetricsHandler,
+        other requests serve static HTML.
+        """
+        path = urlparse(self.path).path
+        if path == '/probe':
+            prometheus_client.MetricsHandler.do_GET(self)
+        else:
+            SimpleHTTPRequestHandler.do_GET(self)
+
+
 def main(argv):
     """Entry point for prometheus_speedtest.py."""
     del argv  # unused
@@ -119,10 +140,14 @@ def main(argv):
 
     registry = core.CollectorRegistry(auto_describe=False)
     registry.register(SpeedtestCollector())
-    metrics_handler = prometheus_client.MetricsHandler.factory(registry)
+    metrics_handler = SpeedtestMetricsHandler.factory(registry)
 
     server = _ThreadingSimpleServer((FLAGS.address, FLAGS.port),
                                     metrics_handler)
+    # SimpleHTTPRequestHandler added support for a directory argument in Python
+    # 3.7. Change directory here for backwards compatibility with older
+    # versions of Python.
+    os.chdir(os.path.join(os.path.dirname(__file__), 'static'))
 
     logging.info('Starting HTTP server listening on %s:%s', FLAGS.address,
                  FLAGS.port)
