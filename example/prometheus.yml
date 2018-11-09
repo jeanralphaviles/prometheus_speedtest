@@ -1,0 +1,9 @@
+global:
+  scrape_timeout: 60s
+
+scrape_configs:
+- job_name: 'speedtest'
+  metrics_path: /probe
+  static_configs:
+  - targets:
+    - prometheus_speedtest:8080
