@@ -123,8 +123,19 @@ python3 setup.py test
 
 ### Contributing
 
-Pull requests welcome. Please adhere to the
-[Google Python style guide.](https://google.github.io/styleguide/pyguide.html)
+Pull requests are welcome. Please adhere to the
+[Google Python style guide](https://github.com/google/styleguide/blob/gh-pages/pyguide.md).
+
+Please format your contributions with the
+[yapf](https://github.com/google/yapf) formatter and lint your code with
+[pylint](https://www.pylint.org). A
+[.pylintrc](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/.pylintrc)
+config has been provided.
+
+```shell
+yapf -i *.py
+pylint3 *.py
+```
 
 ### Deploying
 
