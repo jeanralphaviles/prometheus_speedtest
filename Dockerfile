@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.7-alpine
 
 COPY prometheus_speedtest.py /
 COPY requirements.txt /
