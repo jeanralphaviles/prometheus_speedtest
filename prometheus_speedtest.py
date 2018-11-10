@@ -1,8 +1,9 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3
 """Instrument speedtest.net speedtests from Prometheus."""
 
 import argparse
 import http
+import socketserver
 
 import glog as logging
 import prometheus_client
@@ -20,7 +21,7 @@ PARSER.add_argument(
     help='port to listen on.')
 
 
-class PrometheusSpeedtest(object):
+class PrometheusSpeedtest:
     """Enapsulates behavior performing and reporting results of speedtests."""
 
     def __init__(self, source_address=None, timeout=10):
@@ -52,7 +53,7 @@ class PrometheusSpeedtest(object):
         return client.results
 
 
-class SpeedtestCollector(object):
+class SpeedtestCollector:
     """Performs Speedtests when requested from Prometheus."""
 
     def __init__(self, tester=None):
@@ -100,8 +101,14 @@ def main():
     registry.register(SpeedtestCollector())
     metrics_handler = prometheus_client.MetricsHandler.factory(registry)
 
+    # http.server.ThreadingHTTPServer is new to Python 3.7, create our own for
+    # backwards-compatibility.
+    threading_http_server = type(
+        'ThreadingHTTPServer',
+        (socketserver.ThreadingMixIn, http.server.HTTPServer), {})
+    server = threading_http_server(('', flags.port), metrics_handler)
+
     logging.info('Starting HTTP server on port %s', flags.port)
-    server = http.server.ThreadingHTTPServer(('', flags.port), metrics_handler)
     server.serve_forever()
 
 

@@ -12,7 +12,7 @@ def read_file(rel_path):
     """
     here = os.path.abspath(os.path.dirname(__file__))
     with open(os.path.join(here, rel_path), 'r') as rel_file:
-        return rel_file.read()
+        return rel_file.read().strip()
 
 
 setup(
@@ -27,6 +27,10 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: System :: Monitoring',
         'Topic :: System :: Networking :: Monitoring',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python',
     ],
@@ -50,5 +54,4 @@ setup(
     py_modules=['prometheus_speedtest'],
     setup_requires=['setuptools>=38.6.0'],
     url='https://github.com/jeanralphaviles/prometheus_speedtest',
-    version=read_file('version.txt'),
-)
+    version=read_file('version.txt'))

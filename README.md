@@ -32,7 +32,7 @@ docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp jraviles/prometh
 installed with:
 
 ```shell
-pip install prometheus_speedtest
+pip3 install prometheus_speedtest
 ```
 
 ### Usage
@@ -90,7 +90,7 @@ instructions on how to deploy `prometheus_speedtest` to
 
 ### Prerequisites
 
-* [Python 3.7](https://www.python.org)
+* [Python 3](https://www.python.org)
 * [Docker](https://www.docker.com)
 * [Twine](https://github.com/pypa/twine)
 

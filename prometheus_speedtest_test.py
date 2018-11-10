@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3
 """Tests prometheus_speedtest.py."""
 
 import collections
@@ -57,7 +57,8 @@ class SpeedtestCollectorTest(unittest.TestCase):
         collections.deque(collector.collect())
 
         mock_metric.assert_has_calls(
-            [mock.call(labels=[], value=value) for value in speedtest_results])
+            [mock.call(
+                labels=[], value=value) for value in speedtest_results])
 
 
 if __name__ == '__main__':
