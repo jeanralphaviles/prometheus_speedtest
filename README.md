@@ -18,7 +18,7 @@ These instructions will run `prometheus_speedtest` on your system.
 
 ### Running with Docker
 
-prometheus\_speedtest is available on
+`prometheus_speedtest` is available on
 [Docker Hub](https://hub.docker.com/r/jraviles/prometheus_speedtest) :whale:.
 
 ```shell
@@ -27,7 +27,7 @@ docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp jraviles/prometh
 
 ### Installing with PyPi
 
-prometheus\_speedtest is also provided as a
+`prometheus_speedtest` is also provided as a
 [PyPi package](https://pypi.org/project/prometheus_speedtest). It can be
 installed with:
 
@@ -72,7 +72,7 @@ An example config has been provided at
 docker network create prometheus_network
 docker run --rm -d --net prometheus_network -p 8080:8080/tcp --name prometheus_speedtest \
     jraviles/prometheus_speedtest:latest
-docker run --rm -d --net prometheus_network -p 9090:9090/tcp \
+docker run --rm -d --net prometheus_network -p 9090:9090/tcp --name prometheus \
     -v $PWD/example/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus:latest
 ```
 
@@ -83,9 +83,10 @@ for **download\_speed\_bps**. You should see something like this.
 
 ## Getting Started (Development)
 
-These instructions will get you a copy of the project up and running on your
-local machine for development and testing purposes. See deployment for notes on
-how to deploy the project on a live system.
+These instructions will get you a copy `prometheus_speedtest` up and running on
+your local machine for development and testing purposes. See deployment for
+instructions on how to deploy `prometheus_speedtest` to
+[PyPi](https://pypi.org).
 
 ### Prerequisites
 
@@ -95,11 +96,19 @@ how to deploy the project on a live system.
 
 ### Running locally
 
-First, ensure packages listed in requirements.txt are installed with pip.
+1.  Ensure packages listed in
+    [requirements.txt](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/requirements.txt)
+    are installed with `pip`
 
-```
-python3 prometheus_speedtest.py
-```
+    ```python
+    pip3 install -r requirements.txt
+    ```
+
+1. Run `prometheus_speedtest`
+
+   ```python
+   python3 prometheus_speedtest.py
+   ```
 
 ### Running with Docker
 
@@ -111,7 +120,7 @@ docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp prometheus_speed
 ### Perform a Speedtest
 
 ```shell
-curl localhost:8080
+curl localhost:8080/probe
 ```
 
 Or visit http://localhost:8080
@@ -138,9 +147,7 @@ yapf -i *.py
 pylint3 *.py
 ```
 
-### Deploying
-
-#### pypi
+### Deploying to PyPi
 
 ```shell
 python3 setup.py sdist
