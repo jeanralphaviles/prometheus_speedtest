@@ -115,10 +115,10 @@ curl localhost:8080
 
 Or visit http://localhost:8080
 
-### Testing 
+### Testing
 
 ```shell
-python3 prometheus_speedtest_test.py
+python3 setup.py test
 ```
 
 ### Contributing
