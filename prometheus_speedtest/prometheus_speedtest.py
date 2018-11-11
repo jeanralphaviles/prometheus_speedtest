@@ -5,7 +5,6 @@ import argparse
 import http
 import socketserver
 
-import daemon
 import glog as logging
 import prometheus_client
 from prometheus_client import core
@@ -15,18 +14,12 @@ PARSER = argparse.ArgumentParser(
     description='Instrument speedtest.net speedtests from Prometheus.',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 PARSER.add_argument(
-    '-d',
-    '--daemon',
-    action='store_true',
-    default=False,
-    help='Run prometheus_speedtest in the background.')
-PARSER.add_argument(
     '-p',
     '--port',
     metavar='port',
     default=8080,
     type=int,
-    help='port to listen on.')
+    help='port to listen on')
 
 FLAGS = PARSER.parse_args()
 
@@ -123,8 +116,4 @@ def main():
 
 
 if __name__ == '__main__':
-    if FLAGS.daemon:
-        with daemon.DaemonContext():
-            main()
-    else:
-        main()
+    main()

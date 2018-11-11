@@ -15,9 +15,6 @@ license. For details, see https://github.com/testing-cabal/mock.
 This product bundles glog 0.3.1 which is available under a "2-clause BSD"
 license.  For details, see https://github.com/benley/python-glog.
 
-This product bundles python-daemon 2.2.0 which is available under an "Apache"
-license. For details see https://pagure.io/python-daemon.
-
 This product uses dumb-init which is available under an "MIT" license. For
 details, see https://github.com/Yelp/dumb-init.
 Copyright (c) 2015 Yelp, Inc.

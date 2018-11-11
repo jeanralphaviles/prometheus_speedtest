@@ -37,15 +37,13 @@ These instructions will install and run `prometheus_speedtest` on your system.
 #### Usage
 
 ```
-usage: prometheus_speedtest [-h] [-d] [-p port]
+usage: prometheus_speedtest.py [-h] [-p port]
 
 Instrument speedtest.net speedtests from Prometheus.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -d, --daemon          Run prometheus_speedtest in the background. (default:
-                        False)
-  -p port, --port port  port to listen on. (default: 8080)
+  -p port, --port port  port to listen on (default: 8080)
 ```
 
 ### Running with Docker
@@ -276,4 +274,3 @@ file for details.
 * The Prometheus team <https://prometheus.io>
 * Testing in Python team <http://lists.idyll.org/listinfo/testing-in-python>
 * Benjamin Staffin [python-glog](https://github.com/benley/python-glog)
-* Ben Finney [python-daemon](https://pypi.org/project/python-daemon)
