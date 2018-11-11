@@ -130,10 +130,15 @@ We'll start `prometheus` with this config.
 
 1. Query results
 
-   Visit <http://localhost:9090>, wait for Prometheus to scrape, and issue a
-   query for **download\_speed\_bps**. You should see something like this.
+   * Visit <http://localhost:9090>
 
-   ![Prometheus Query](https://github.com/jeanralphaviles/prometheus_speedtest/raw/master/images/query.png)
+   * Wait around **45 seconds** for Prometheus to perform a Speedtest
+
+   * Issue a query for **download\_speed\_bps**
+
+     You should see something like this.
+
+     ![Prometheus Query](https://github.com/jeanralphaviles/prometheus_speedtest/raw/master/images/query.png)
 
 ### Instrumenting Speedtests with cURL
 
