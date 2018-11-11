@@ -13,7 +13,6 @@ upload\_speed, and latency.
 
 ![Grafana](https://github.com/jeanralphaviles/prometheus_speedtest/raw/master/images/grafana.png)
 
-
 ## Getting Started
 
 These instructions will install and run `prometheus_speedtest` on your system.
@@ -83,7 +82,7 @@ bytes_received 111342756.0
 bytes_sent 5242880.0
 ```
 
-You can also visit http://localhost:8080 in your browser to see the same
+You can also visit <http://localhost:8080> in your browser to see the same
 metrics.
 
 ### Integrating with Prometheus
@@ -129,13 +128,14 @@ has been provided at
 
 ```shell
 docker network create prometheus_network
-docker run --rm -d --net prometheus_network -p 8080:8080/tcp --name prometheus_speedtest \
-    jraviles/prometheus_speedtest:latest
-docker run --rm -d --net prometheus_network -p 9090:9090/tcp --name prometheus \
-    -v $PWD/example/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus:latest
+docker run --rm -d --net prometheus_network -p 8080:8080/tcp \
+    --name prometheus_speedtest jraviles/prometheus_speedtest:latest
+docker run --rm -d --net prometheus_network -p 9090:9090/tcp \
+    -v $PWD/example/prometheus.yml:/etc/prometheus/prometheus.yml \
+    --name prometheus prom/prometheus:latest
 ```
 
-Visit http://localhost:9090, wait for Prometheus to scrape, and issue a query
+Visit <http://localhost:9090>, wait for Prometheus to scrape, and issue a query
 for **download\_speed\_bps**. You should see something like this.
 
 ![Prometheus Query](https://github.com/jeanralphaviles/prometheus_speedtest/raw/master/images/query.png)
@@ -154,13 +154,13 @@ your local machine for development and testing purposes.
 
 #### Python
 
-1.  Ensure packages listed in
-    [requirements.txt](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/requirements.txt)
-    are installed with `pip3`
+1. Ensure packages listed in
+   [requirements.txt](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/requirements.txt)
+   are installed with `pip3`
 
-    ```python
-    pip3 install -r requirements.txt
-    ```
+   ```python
+   pip3 install -r requirements.txt
+   ```
 
 1. Run `prometheus_speedtest`
 
@@ -176,7 +176,7 @@ your local machine for development and testing purposes.
    docker build -t prometheus_speedtest:latest .
    ```
 
-2. Running
+1. Running
 
    ```shell
    docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp prometheus_speedtest:latest
@@ -188,7 +188,7 @@ your local machine for development and testing purposes.
 curl localhost:8080/probe
 ```
 
-Or visit http://localhost:8080
+Or visit <http://localhost:8080>
 
 ### Running Unit Tests
 
