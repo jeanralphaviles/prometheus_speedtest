@@ -38,9 +38,9 @@ class PrometheusSpeedtest:
         """Instantiates a PrometheusSpeedtest object.
 
         Args:
-          source_address: str - optional network address to bind to.
-            e.g. 192.168.1.1.
-          timeout: int - optional timeout for speedtest in seconds.
+            source_address: str - optional network address to bind to.
+                e.g. 192.168.1.1.
+            timeout: int - optional timeout for speedtest in seconds.
         """
         self._source_address = source_address
         self._timeout = timeout
@@ -49,9 +49,7 @@ class PrometheusSpeedtest:
         """Performs speedtest, returns results.
 
         Returns:
-          speedtest.SpeedtestResults object.
-        Raises:
-          TimeoutError: Speedtest timeout was reached.
+            speedtest.SpeedtestResults object.
         """
         logging.info('Performing Speedtest')
         client = speedtest.Speedtest(
@@ -70,12 +68,16 @@ class SpeedtestCollector:
         """Instantiates a SpeedtestCollector object.
 
         Args:
-          tester: An instantiated PrometheusSpeedtest object for testing.
+            tester: An instantiated PrometheusSpeedtest object for testing.
         """
         self._tester = tester if tester else PrometheusSpeedtest()
 
     def collect(self):
-        """Collects Speedtest metrics."""
+        """Performs a Speedtests and yields metrics.
+
+        Yields:
+            core.Metric objects.
+        """
         results = self._tester.test()
 
         download_speed = core.GaugeMetricFamily('download_speed_bps',
