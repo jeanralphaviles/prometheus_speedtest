@@ -176,6 +176,7 @@ your local machine for development and testing purposes.
 
 * [Python 3](https://www.python.org)
 * [Docker](https://www.docker.com)
+* [Pytest](https://pytest.org)
 
 ### Running Locally
 
@@ -192,7 +193,7 @@ your local machine for development and testing purposes.
 1. Run `prometheus_speedtest`
 
    ```python
-   python3 prometheus_speedtest.py
+   python3 prometheus_speedtest/prometheus_speedtest.py
    ```
 
 #### Docker
@@ -220,7 +221,7 @@ Or visit <http://localhost:8080>
 ### Running Unit Tests
 
 ```shell
-python3 setup.py test
+pytest-3
 ```
 
 ### Contributing
@@ -235,8 +236,8 @@ Please format your contributions with the
 config has been provided.
 
 ```shell
-yapf -i *.py
-pylint3 *.py
+yapf -i **/*.py
+pylint3 **/*.py
 ```
 
 ## Maintenance

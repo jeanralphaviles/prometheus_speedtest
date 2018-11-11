@@ -2,6 +2,7 @@
 import os
 
 from setuptools import setup
+from setuptools import find_packages
 
 
 def read_file(rel_path):
@@ -37,9 +38,12 @@ setup(
                  'Prometheus Pushgateway'),
     entry_points={
         'console_scripts': [
-            'prometheus_speedtest=prometheus_speedtest:main',
+            ('prometheus_speedtest='
+             'prometheus_speedtest.prometheus_speedtest:main'),
         ],
     },
+    include_package_data=True,
+    packages=find_packages(),
     install_requires=[
         'glog>=0.3.1',
         'mock>=2.0.0',

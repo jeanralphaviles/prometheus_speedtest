@@ -8,7 +8,7 @@ import mock
 import prometheus_client
 import speedtest
 
-import prometheus_speedtest
+from prometheus_speedtest import prometheus_speedtest
 
 
 class PrometheusSpeedtestTest(unittest.TestCase):
