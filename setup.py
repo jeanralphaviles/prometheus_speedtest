@@ -45,6 +45,7 @@ setup(
         'glog>=0.3.1',
         'mock>=2.0.0',
         'prometheus_client>=0.3.1',
+        'python-daemon>=2.2.0',
         'speedtest-cli>=2.0.2',
     ],
     keywords=['prometheus', 'monitoring', 'speedtest', 'speedtest.net'],

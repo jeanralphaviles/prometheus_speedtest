@@ -5,13 +5,21 @@ import argparse
 import http
 import socketserver
 
+import daemon
 import glog as logging
 import prometheus_client
 from prometheus_client import core
 import speedtest
 
 PARSER = argparse.ArgumentParser(
-    description='Instrument speedtest.net speedtests from Prometheus.')
+    description='Instrument speedtest.net speedtests from Prometheus.',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+PARSER.add_argument(
+    '-d',
+    '--daemon',
+    action='store_true',
+    default=False,
+    help='Run prometheus_speedtest in the background.')
 PARSER.add_argument(
     '-p',
     '--port',
@@ -19,6 +27,8 @@ PARSER.add_argument(
     default=8080,
     type=int,
     help='port to listen on.')
+
+FLAGS = PARSER.parse_args()
 
 
 class PrometheusSpeedtest:
@@ -95,8 +105,6 @@ class SpeedtestCollector:
 
 def main():
     """Entry point for prometheus_speedtest.py."""
-    flags = PARSER.parse_args()
-
     registry = core.CollectorRegistry(auto_describe=False)
     registry.register(SpeedtestCollector())
     metrics_handler = prometheus_client.MetricsHandler.factory(registry)
@@ -106,11 +114,15 @@ def main():
     threading_http_server = type(
         'ThreadingHTTPServer',
         (socketserver.ThreadingMixIn, http.server.HTTPServer), {})
-    server = threading_http_server(('', flags.port), metrics_handler)
+    server = threading_http_server(('', FLAGS.port), metrics_handler)
 
-    logging.info('Starting HTTP server on port %s', flags.port)
+    logging.info('Starting HTTP server on port %s', FLAGS.port)
     server.serve_forever()
 
 
 if __name__ == '__main__':
-    main()
+    if FLAGS.daemon:
+        with daemon.DaemonContext():
+            main()
+    else:
+        main()
