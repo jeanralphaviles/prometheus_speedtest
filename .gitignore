@@ -23,5 +23,6 @@
 /dist
 *.egg-info
 *.eggs
+/build
 # pytest
 .cache/
