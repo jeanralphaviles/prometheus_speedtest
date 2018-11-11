@@ -58,6 +58,83 @@ on [Docker Hub](https://hub.docker.com/r/jraviles/prometheus_speedtest)
 docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp jraviles/prometheus_speedtest:latest
 ```
 
+### Integrating with Prometheus
+
+`prometheus_speedtest` is best when paired with
+[Prometheus](https://prometheus.io). Prometheus can be configured to perform
+Speedtests on an interval and record their results.
+
+Speedtest metrics available to query in Prometheus.
+
+| Metric Name           | Description                 |
+|---------------------- |---------------------------- |
+| download\_speed\_bps  | Download speed (bit/s)      |
+| upload\_speed\_bps    | Upload speed (bit/s)        |
+| ping\_ms              | Latency (ms)                |
+| bytes\_received       | Bytes received during test  |
+| bytes\_sent           | Bytes sent during test      |
+
+#### prometheus.yml config
+
+Add this to your
+[Prometheus config](https://prometheus.io/docs/prometheus/latest/configuration/configuration)
+to start instrumenting Speedtests and recording their metrics.
+
+```yaml
+global:
+  scrape_timeout: 60s
+
+scrape_configs:
+- job_name: 'speedtest'
+  metrics_path: /probe
+  static_configs:
+  - targets:
+    - localhost:8080
+```
+
+Note if you're running `prometheus` under Docker, you must link the
+`prometheus` container to `prometheus_speedtest`. See the steps below for how
+this can be done.
+
+#### Trying it out
+
+An example
+[Prometheus config](https://prometheus.io/docs/prometheus/latest/configuration/configuration)
+has been provided at
+[example/prometheus.yml](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/example/prometheus.yml).
+We'll start `prometheus` with this config.
+
+1. Docker Network
+
+   Create the [Docker network](https://docs.docker.com/network) that will link
+   `prometheus_speedtest` and `prometheus` together.
+
+   ```shell
+   docker network create prometheus_network
+   ```
+
+1. Start Prometheus Speedtest
+
+   ```shell
+   docker run --rm -d --net prometheus_network -p 8080:8080/tcp \
+      --name prometheus_speedtest jraviles/prometheus_speedtest:latest
+   ```
+
+1. Start Prometheus
+
+   ```shell
+   docker run --rm -d --net prometheus_network -p 9090:9090/tcp \
+      -v $PWD/example/prometheus.yml:/etc/prometheus/prometheus.yml \
+      --name prometheus prom/prometheus:latest
+   ```
+
+1. Query results
+
+   Visit <http://localhost:9090>, wait for Prometheus to scrape, and issue a
+   query for **download\_speed\_bps**. You should see something like this.
+
+   ![Prometheus Query](https://github.com/jeanralphaviles/prometheus_speedtest/raw/master/images/query.png)
+
 ### Instrumenting Speedtests with cURL
 
 Once `prometheus_speedtest` has been started, with either Docker or PyPi,
@@ -84,61 +161,6 @@ bytes_sent 5242880.0
 
 You can also visit <http://localhost:8080> in your browser to see the same
 metrics.
-
-### Integrating with Prometheus
-
-`prometheus_speedtest` is best when paired with
-[Prometheus](https://prometheus.io). Prometheus can be configured to perform
-Speedtests on an interval and record their results.
-
-Speedtest metrics available to query in Prometheus.
-
-| Metric Name           | Description                 |
-|---------------------- |---------------------------- |
-| download\_speed\_bps  | Download speed (bit/s)      |
-| upload\_speed\_bps    | Upload speed (bit/s)        |
-| ping\_ms              | Latency (ms)                |
-| bytes\_received       | Bytes received during test  |
-| bytes\_sent           | Bytes sent during test      |
-
-#### Example prometheus.yml config
-
-Add this to your
-[Prometheus config](https://prometheus.io/docs/prometheus/latest/configuration/configuration)
-to start instrumenting Speedtests and recording their metrics.
-
-```yaml
-global:
-  scrape_timeout: 60s
-
-scrape_configs:
-- job_name: 'speedtest'
-  metrics_path: /probe
-  static_configs:
-  - targets:
-    - prometheus_speedtest:8080
-```
-
-#### Trying it out
-
-An example
-[Prometheus config](https://prometheus.io/docs/prometheus/latest/configuration/configuration)
-has been provided at
-[example/prometheus.yml](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/example/prometheus.yml).
-
-```shell
-docker network create prometheus_network
-docker run --rm -d --net prometheus_network -p 8080:8080/tcp \
-    --name prometheus_speedtest jraviles/prometheus_speedtest:latest
-docker run --rm -d --net prometheus_network -p 9090:9090/tcp \
-    -v $PWD/example/prometheus.yml:/etc/prometheus/prometheus.yml \
-    --name prometheus prom/prometheus:latest
-```
-
-Visit <http://localhost:9090>, wait for Prometheus to scrape, and issue a query
-for **download\_speed\_bps**. You should see something like this.
-
-![Prometheus Query](https://github.com/jeanralphaviles/prometheus_speedtest/raw/master/images/query.png)
 
 ## Getting Started (Development)
 
