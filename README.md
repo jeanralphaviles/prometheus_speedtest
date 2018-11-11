@@ -1,6 +1,8 @@
 # Prometheus Speedtest
 
-Instrument [Speedtest.net](http://speedtest.net) tests from Prometheus.
+Instrument [Speedtest.net](http://speedtest.net) tests from
+[Prometheus](https://prometheus.io). Provides metrics on download\_speed,
+upload\_speed, and latency.
 
 [![Build Status](https://travis-ci.org/jeanralphaviles/prometheus_speedtest.svg?branch=master)](https://travis-ci.org/jeanralphaviles/prometheus_speedtest/branches)
 [![Docker Build Status](https://img.shields.io/docker/build/jraviles/prometheus_speedtest.svg)](https://hub.docker.com/r/jraviles/prometheus_speedtest/)
@@ -14,28 +16,26 @@ Instrument [Speedtest.net](http://speedtest.net) tests from Prometheus.
 
 ## Getting Started
 
-These instructions will run `prometheus_speedtest` on your system.
+These instructions will install and run `prometheus_speedtest` on your system.
 
-### Running with Docker
+### PyPi Package
 
-`prometheus_speedtest` is available on
-[Docker Hub](https://hub.docker.com/r/jraviles/prometheus_speedtest) :whale:.
+`prometheus_speedtest` is provided as a
+[PyPi package](https://pypi.org/project/prometheus_speedtest).
 
-```shell
-docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp jraviles/prometheus_speedtest:latest
-```
+1. Installing
 
-### Installing with PyPi
+   ```shell
+   pip3 install prometheus_speedtest
+   ```
 
-`prometheus_speedtest` is also provided as a
-[PyPi package](https://pypi.org/project/prometheus_speedtest). It can be
-installed with:
+1. Running
 
-```shell
-pip3 install prometheus_speedtest
-```
+   ```shell
+   prometheus_speedtest
+   ```
 
-### Usage
+#### Usage
 
 ```
 usage: prometheus_speedtest [-h] [-d] [-p port]
@@ -49,9 +49,64 @@ optional arguments:
   -p port, --port port  port to listen on. (default: 8080)
 ```
 
+### Running with Docker
+
+`prometheus_speedtest` is also available as a [Docker](http://docker.com) image
+on [Docker Hub](https://hub.docker.com/r/jraviles/prometheus_speedtest)
+:whale:.
+
+```shell
+docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp jraviles/prometheus_speedtest:latest
+```
+
+### Instrumenting Speedtests with cURL
+
+Once `prometheus_speedtest` has been started, with either Docker or PyPi,
+Speedtests can be instrumented with [cURL](https://curl.haxx.se).
+
+```shell
+$ curl localhost:8080/probe
+# HELP download_speed_bps Download speed (bit/s)
+# TYPE download_speed_bps gauge
+download_speed_bps 88016694.95692767
+# HELP upload_speed_bps Upload speed (bit/s)
+# TYPE upload_speed_bps gauge
+upload_speed_bps 3415613.277989314
+# HELP ping_ms Latency (ms)
+# TYPE ping_ms gauge
+ping_ms 20.928
+# HELP bytes_received Bytes received during test
+# TYPE bytes_received gauge
+bytes_received 111342756.0
+# HELP bytes_sent Bytes sent during test
+# TYPE bytes_sent gauge
+bytes_sent 5242880.0
+```
+
+You can also visit http://localhost:8080 in your browser to see the same
+metrics.
+
 ### Integrating with Prometheus
 
+`prometheus_speedtest` is best when paired with
+[Prometheus](https://prometheus.io). Prometheus can be configured to perform
+Speedtests on an interval and record their results.
+
+Speedtest metrics available to query in Prometheus.
+
+| Metric Name           | Description                 |
+|---------------------- |---------------------------- |
+| download\_speed\_bps  | Download speed (bit/s)      |
+| upload\_speed\_bps    | Upload speed (bit/s)        |
+| ping\_ms              | Latency (ms)                |
+| bytes\_received       | Bytes received during test  |
+| bytes\_sent           | Bytes sent during test      |
+
 #### Example prometheus.yml config
+
+Add this to your
+[Prometheus config](https://prometheus.io/docs/prometheus/latest/configuration/configuration)
+to start instrumenting Speedtests and recording their metrics.
 
 ```yaml
 global:
@@ -67,7 +122,9 @@ scrape_configs:
 
 #### Trying it out
 
-An example config has been provided at
+An example
+[Prometheus config](https://prometheus.io/docs/prometheus/latest/configuration/configuration)
+has been provided at
 [example/prometheus.yml](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/example/prometheus.yml).
 
 ```shell
@@ -86,21 +143,20 @@ for **download\_speed\_bps**. You should see something like this.
 ## Getting Started (Development)
 
 These instructions will get you a copy `prometheus_speedtest` up and running on
-your local machine for development and testing purposes. See deployment for
-instructions on how to deploy `prometheus_speedtest` to
-[PyPi](https://pypi.org).
+your local machine for development and testing purposes.
 
 ### Prerequisites
 
 * [Python 3](https://www.python.org)
 * [Docker](https://www.docker.com)
-* [Twine](https://github.com/pypa/twine)
 
-### Running locally
+### Running Locally
+
+#### Python
 
 1.  Ensure packages listed in
     [requirements.txt](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/requirements.txt)
-    are installed with `pip`
+    are installed with `pip3`
 
     ```python
     pip3 install -r requirements.txt
@@ -112,12 +168,19 @@ instructions on how to deploy `prometheus_speedtest` to
    python3 prometheus_speedtest.py
    ```
 
-### Running with Docker
+#### Docker
 
-```shell
-docker build -t prometheus_speedtest:latest .
-docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp prometheus_speedtest:latest
-```
+1. Building image
+
+   ```shell
+   docker build -t prometheus_speedtest:latest .
+   ```
+
+2. Running
+
+   ```shell
+   docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp prometheus_speedtest:latest
+   ```
 
 ### Perform a Speedtest
 
@@ -127,7 +190,7 @@ curl localhost:8080/probe
 
 Or visit http://localhost:8080
 
-### Testing
+### Running Unit Tests
 
 ```shell
 python3 setup.py test
@@ -149,12 +212,26 @@ yapf -i *.py
 pylint3 *.py
 ```
 
+## Maintenance
+
 ### Deploying to PyPi
 
-```shell
-python3 setup.py sdist
-twine upload dist/*
-```
+1. Increment version number in
+   [version.txt](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/version.txt)
+
+1. Create PyPi package
+
+   ```shell
+   python3 setup.py sdist
+   ```
+
+1. Upload package to PyPi
+
+   Ensure that [Twine](https://github.com/pypa/twine) has been installed.
+
+   ```shell
+   twine upload dist/*
+   ```
 
 ## Authors
 
