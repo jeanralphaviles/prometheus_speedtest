@@ -10,6 +10,8 @@ import prometheus_client
 from prometheus_client import core
 import speedtest
 
+from prometheus_speedtest import version
+
 PARSER = argparse.ArgumentParser(
     description='Instrument speedtest.net speedtests from Prometheus.',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -20,6 +22,12 @@ PARSER.add_argument(
     default=8080,
     type=int,
     help='port to listen on')
+PARSER.add_argument(
+    '-v',
+    '--version',
+    action='version',
+    version='%(prog)s v{version}'.format(version=version.__version__),
+    help='show version information and exit')
 
 FLAGS = PARSER.parse_args()
 

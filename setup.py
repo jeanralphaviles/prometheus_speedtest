@@ -15,6 +15,7 @@ def read_file(rel_path):
     with open(os.path.join(here, rel_path), 'r') as rel_file:
         return rel_file.read().strip()
 
+exec(read_file('prometheus_speedtest/version.py'))
 
 setup(
     name='prometheus_speedtest',
@@ -58,4 +59,4 @@ setup(
     py_modules=['prometheus_speedtest'],
     setup_requires=['setuptools>=38.6.0'],
     url='https://github.com/jeanralphaviles/prometheus_speedtest',
-    version=read_file('version.txt'))
+    version=__version__)

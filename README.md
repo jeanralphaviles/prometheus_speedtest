@@ -37,13 +37,14 @@ These instructions will install and run `prometheus_speedtest` on your system.
 #### Usage
 
 ```
-usage: prometheus_speedtest.py [-h] [-p port]
+usage: prometheus_speedtest [-h] [-p port] [-v]
 
 Instrument speedtest.net speedtests from Prometheus.
 
 optional arguments:
   -h, --help            show this help message and exit
   -p port, --port port  port to listen on (default: 8080)
+  -v, --version         show version information and exit
 ```
 
 ### Running with Docker
@@ -191,7 +192,7 @@ your local machine for development and testing purposes.
 1. Run `prometheus_speedtest`
 
    ```python
-   python3 prometheus_speedtest/prometheus_speedtest.py
+   python3 -m prometheus_speedtest.prometheus_speedtest
    ```
 
 #### Docker
@@ -243,7 +244,7 @@ pylint3 **/*.py
 ### Deploying to PyPi
 
 1. Increment version number in
-   [version.txt](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/version.txt)
+   [version.txt](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/prometheus_speedtest/version.py)
 
 1. Create PyPi package
 
