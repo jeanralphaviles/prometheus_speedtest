@@ -19,7 +19,7 @@ PARSER.add_argument(
     '-p',
     '--port',
     metavar='port',
-    default=8080,
+    default=9516,
     type=int,
     help='port to listen on')
 PARSER.add_argument(

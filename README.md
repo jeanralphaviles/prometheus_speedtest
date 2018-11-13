@@ -43,7 +43,7 @@ Instrument speedtest.net speedtests from Prometheus.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -p port, --port port  port to listen on (default: 8080)
+  -p port, --port port  port to listen on (default: 9516)
   -v, --version         show version information and exit
 ```
 
@@ -54,7 +54,7 @@ on [Docker Hub](https://hub.docker.com/r/jraviles/prometheus_speedtest)
 :whale:.
 
 ```shell
-docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp jraviles/prometheus_speedtest:latest
+docker run --rm -d --name prometheus_speedtest -p 9516:9516/tcp jraviles/prometheus_speedtest:latest
 ```
 
 ### Integrating with Prometheus
@@ -88,7 +88,7 @@ scrape_configs:
   metrics_path: /probe
   static_configs:
   - targets:
-    - localhost:8080
+    - localhost:9516
 ```
 
 Note if you're running `prometheus` under Docker, you must link the
@@ -115,7 +115,7 @@ We'll start `prometheus` with this config.
 1. Start Prometheus Speedtest
 
    ```shell
-   docker run --rm -d --net prometheus_network -p 8080:8080/tcp \
+   docker run --rm -d --net prometheus_network -p 9516:9516/tcp \
       --name prometheus_speedtest jraviles/prometheus_speedtest:latest
    ```
 
@@ -145,7 +145,7 @@ Once `prometheus_speedtest` has been started, with either Docker or PyPi,
 Speedtests can be instrumented with [cURL](https://curl.haxx.se).
 
 ```shell
-$ curl localhost:8080/probe
+$ curl localhost:9516/probe
 # HELP download_speed_bps Download speed (bit/s)
 # TYPE download_speed_bps gauge
 download_speed_bps 88016694.95692767
@@ -163,8 +163,14 @@ bytes_received 111342756.0
 bytes_sent 5242880.0
 ```
 
-You can also visit <http://localhost:8080> in your browser to see the same
+You can also visit <http://localhost:9516> in your browser to see the same
 metrics.
+
+### Default Port
+
+Prometheus Speedtest defaults to running on port 9516; this is the allocated
+port for this exporter in the
+[Prometheus Default Port Allocations Guide](https://github.com/prometheus/prometheus/wiki/Default-port-allocations).
 
 ## Getting Started (Development)
 
@@ -206,16 +212,16 @@ your local machine for development and testing purposes.
 1. Running
 
    ```shell
-   docker run --rm -d --name prometheus_speedtest -p 8080:8080/tcp prometheus_speedtest:latest
+   docker run --rm -d --name prometheus_speedtest -p 9516:9516/tcp prometheus_speedtest:latest
    ```
 
 ### Perform a Speedtest
 
 ```shell
-curl localhost:8080/probe
+curl localhost:9516/probe
 ```
 
-Or visit <http://localhost:8080>
+Or visit <http://localhost:9516>
 
 ### Running Unit Tests
 

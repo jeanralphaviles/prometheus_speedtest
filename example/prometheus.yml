@@ -7,4 +7,4 @@ scrape_configs:
   metrics_path: /probe
   static_configs:
   - targets:
-    - prometheus_speedtest:8080
+    - prometheus_speedtest:9516
