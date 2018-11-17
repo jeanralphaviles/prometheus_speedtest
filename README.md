@@ -25,7 +25,7 @@ These instructions will install and run `prometheus_speedtest` on your system.
 1. Installing
 
    ```shell
-   pip3 install prometheus_speedtest
+   pip install prometheus_speedtest
    ```
 
 1. Running
@@ -179,7 +179,7 @@ your local machine for development and testing purposes.
 
 ### Prerequisites
 
-* [Python 3](https://www.python.org)
+* [Python](https://www.python.org)
 * [Docker](https://www.docker.com)
 * [Pytest](https://pytest.org)
 
@@ -189,16 +189,16 @@ your local machine for development and testing purposes.
 
 1. Ensure packages listed in
    [requirements.txt](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/requirements.txt)
-   are installed with `pip3`
+   are installed with `pip`
 
    ```python
-   pip3 install -r requirements.txt
+   pip install -r requirements.txt
    ```
 
 1. Run `prometheus_speedtest`
 
    ```python
-   python3 -m prometheus_speedtest.prometheus_speedtest
+   python -m prometheus_speedtest.prometheus_speedtest
    ```
 
 #### Docker
@@ -226,7 +226,7 @@ Or visit <http://localhost:9516>
 ### Running Unit Tests
 
 ```shell
-pytest-3
+pytest
 ```
 
 ### Contributing
@@ -242,7 +242,7 @@ config has been provided.
 
 ```shell
 yapf -i **/*.py
-pylint3 **/*.py
+pylint **/*.py
 ```
 
 ## Maintenance

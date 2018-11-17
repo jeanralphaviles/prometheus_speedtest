@@ -29,6 +29,8 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: System :: Monitoring',
         'Topic :: System :: Networking :: Monitoring',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
@@ -49,7 +51,7 @@ setup(
     install_requires=[
         'glog>=0.3.1',
         'mock>=2.0.0',
-        'prometheus_client>=0.3.1',
+        'prometheus_client>=0.4.2',
         'speedtest-cli>=2.0.2',
     ],
     keywords=['prometheus', 'monitoring', 'speedtest', 'speedtest.net'],

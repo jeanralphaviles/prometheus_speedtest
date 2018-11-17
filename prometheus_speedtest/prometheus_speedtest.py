@@ -2,15 +2,21 @@
 """Instrument speedtest.net speedtests from Prometheus."""
 
 import argparse
-import http
-import socketserver
+
+try:
+    from http.server import HTTPServer
+    from socketserver import ThreadingMixIn
+except ImportError:
+    # Python 2
+    from BaseHTTPServer import HTTPServer
+    from SocketServer import ThreadingMixIn
 
 import glog as logging
 import prometheus_client
 from prometheus_client import core
 import speedtest
 
-from prometheus_speedtest import version
+from . import version
 
 PARSER = argparse.ArgumentParser(
     description='Instrument speedtest.net speedtests from Prometheus.',
@@ -106,18 +112,21 @@ class SpeedtestCollector:
         yield bytes_sent
 
 
+class _ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
+    """Thread per request HTTP server.
+
+    http.server.ThreadingHTTPServer is new to Python 3.7, create our own for
+    backwards-compatibility.
+    """
+
+
 def main():
     """Entry point for prometheus_speedtest.py."""
     registry = core.CollectorRegistry(auto_describe=False)
     registry.register(SpeedtestCollector())
     metrics_handler = prometheus_client.MetricsHandler.factory(registry)
 
-    # http.server.ThreadingHTTPServer is new to Python 3.7, create our own for
-    # backwards-compatibility.
-    threading_http_server = type(
-        'ThreadingHTTPServer',
-        (socketserver.ThreadingMixIn, http.server.HTTPServer), {})
-    server = threading_http_server(('', FLAGS.port), metrics_handler)
+    server = _ThreadingSimpleServer(('', FLAGS.port), metrics_handler)
 
     logging.info('Starting HTTP server on port %s', FLAGS.port)
     server.serve_forever()
