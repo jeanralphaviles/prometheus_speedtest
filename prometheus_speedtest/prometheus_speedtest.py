@@ -22,6 +22,13 @@ PARSER = argparse.ArgumentParser(
     description='Instrument speedtest.net speedtests from Prometheus.',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 PARSER.add_argument(
+    '-a',
+    '--address',
+    metavar='address',
+    default='0.0.0.0',
+    type=str,
+    help='address to listen on')
+PARSER.add_argument(
     '-p',
     '--port',
     metavar='port',
@@ -126,7 +133,7 @@ def main():
     registry.register(SpeedtestCollector())
     metrics_handler = prometheus_client.MetricsHandler.factory(registry)
 
-    server = _ThreadingSimpleServer(('', FLAGS.port), metrics_handler)
+    server = _ThreadingSimpleServer((FLAGS.address, FLAGS.port), metrics_handler)
 
     logging.info('Starting HTTP server on port %s', FLAGS.port)
     server.serve_forever()
