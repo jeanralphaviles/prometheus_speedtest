@@ -43,6 +43,8 @@ Instrument speedtest.net speedtests from Prometheus.
 
 optional arguments:
   -h, --help            show this help message and exit
+  -a address, --address address
+                        address to listen on (default: 0.0.0.0)
   -p port, --port port  port to listen on (default: 9516)
   -v, --version         show version information and exit
 ```
