@@ -25,7 +25,7 @@ PARSER.add_argument(
     '-a',
     '--address',
     metavar='address',
-    default='',
+    default='0.0.0.0',
     type=str,
     help='address to listen on')
 PARSER.add_argument(
