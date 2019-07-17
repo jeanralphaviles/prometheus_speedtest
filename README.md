@@ -37,7 +37,7 @@ These instructions will install and run `prometheus_speedtest` on your system.
 #### Usage
 
 ```
-usage: prometheus_speedtest [-h] [-p port] [-v]
+usage: prometheus_speedtest [-h] [-a address] [-p port] [-v]
 
 Instrument speedtest.net speedtests from Prometheus.
 
