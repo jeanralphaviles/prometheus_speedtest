@@ -12,7 +12,9 @@ python:
 services:
   - docker
 install:
-  - pip install -r requirements.txt
+  - pip install pylint yapf -r requirements.txt
 script:
   - docker build .
+  - pylint **/*.py
   - pytest
+  - yapf -d **/*.py

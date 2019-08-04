@@ -21,20 +21,18 @@ from . import version
 PARSER = argparse.ArgumentParser(
     description='Instrument speedtest.net speedtests from Prometheus.',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-PARSER.add_argument(
-    '-a',
-    '--address',
-    metavar='address',
-    default='0.0.0.0',
-    type=str,
-    help='address to listen on')
-PARSER.add_argument(
-    '-p',
-    '--port',
-    metavar='port',
-    default=9516,
-    type=int,
-    help='port to listen on')
+PARSER.add_argument('-a',
+                    '--address',
+                    metavar='address',
+                    default='0.0.0.0',
+                    type=str,
+                    help='address to listen on')
+PARSER.add_argument('-p',
+                    '--port',
+                    metavar='port',
+                    default=9516,
+                    type=int,
+                    help='port to listen on')
 PARSER.add_argument(
     '-v',
     '--version',
@@ -45,9 +43,8 @@ PARSER.add_argument(
 FLAGS = PARSER.parse_args()
 
 
-class PrometheusSpeedtest:
+class PrometheusSpeedtest():
     """Enapsulates behavior performing and reporting results of speedtests."""
-
     def __init__(self, source_address=None, timeout=10):
         """Instantiates a PrometheusSpeedtest object.
 
@@ -66,8 +63,8 @@ class PrometheusSpeedtest:
             speedtest.SpeedtestResults object.
         """
         logging.info('Performing Speedtest')
-        client = speedtest.Speedtest(
-            source_address=self._source_address, timeout=self._timeout)
+        client = speedtest.Speedtest(source_address=self._source_address,
+                                     timeout=self._timeout)
         client.get_best_server()
         client.download()
         client.upload()
@@ -75,9 +72,8 @@ class PrometheusSpeedtest:
         return client.results
 
 
-class SpeedtestCollector:
+class SpeedtestCollector():
     """Performs Speedtests when requested from Prometheus."""
-
     def __init__(self, tester=None):
         """Instantiates a SpeedtestCollector object.
 
@@ -133,7 +129,8 @@ def main():
     registry.register(SpeedtestCollector())
     metrics_handler = prometheus_client.MetricsHandler.factory(registry)
 
-    server = _ThreadingSimpleServer((FLAGS.address, FLAGS.port), metrics_handler)
+    server = _ThreadingSimpleServer((FLAGS.address, FLAGS.port),
+                                    metrics_handler)
 
     logging.info('Starting HTTP server on port %s', FLAGS.port)
     server.serve_forever()

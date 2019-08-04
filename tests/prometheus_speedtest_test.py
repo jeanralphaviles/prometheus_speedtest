@@ -28,8 +28,8 @@ class PrometheusSpeedtestTest(unittest.TestCase):
 
         self.assertEqual(tester.test(), expected)
 
-        mock_speedtest.assert_called_once_with(
-            source_address='4.3.2.1', timeout=10)
+        mock_speedtest.assert_called_once_with(source_address='4.3.2.1',
+                                               timeout=10)
         mock_speedtest.return_value.get_best_server.assert_called_once_with()
         mock_speedtest.return_value.download.assert_called_once_with()
         mock_speedtest.return_value.upload.assert_called_once_with()
@@ -57,8 +57,7 @@ class SpeedtestCollectorTest(unittest.TestCase):
         collections.deque(collector.collect())
 
         mock_metric.assert_has_calls(
-            [mock.call(
-                labels=[], value=value) for value in speedtest_results])
+            [mock.call(labels=[], value=value) for value in speedtest_results])
 
 
 if __name__ == '__main__':
