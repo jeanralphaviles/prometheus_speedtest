@@ -1,7 +1,16 @@
 #!/usr/bin/python3
 """Instrument speedtest.net speedtests from Prometheus."""
 
-import argparse
+from __future__ import print_function
+
+from absl import app
+from absl import flags
+from absl import logging
+from prometheus_client import core
+import prometheus_client
+import speedtest
+
+from . import version
 
 try:
     from http.server import HTTPServer
@@ -11,36 +20,10 @@ except ImportError:
     from BaseHTTPServer import HTTPServer
     from SocketServer import ThreadingMixIn
 
-import glog as logging
-import prometheus_client
-from prometheus_client import core
-import speedtest
-
-from . import version
-
-PARSER = argparse.ArgumentParser(
-    description='Instrument speedtest.net speedtests from Prometheus.',
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-PARSER.add_argument('-a',
-                    '--address',
-                    metavar='address',
-                    default='0.0.0.0',
-                    type=str,
-                    help='address to listen on')
-PARSER.add_argument('-p',
-                    '--port',
-                    metavar='port',
-                    default=9516,
-                    type=int,
-                    help='port to listen on')
-PARSER.add_argument(
-    '-v',
-    '--version',
-    action='version',
-    version='%(prog)s v{version}'.format(version=version.__version__),
-    help='show version information and exit')
-
-FLAGS = PARSER.parse_args()
+flags.DEFINE_string('address', '0.0.0.0', 'address to listen on')
+flags.DEFINE_integer('port', 9516, 'port to listen on')
+flags.DEFINE_boolean('version', False, 'show version')
+FLAGS = flags.FLAGS
 
 
 class PrometheusSpeedtest():
@@ -123,8 +106,13 @@ class _ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
     """
 
 
-def main():
+def main(argv):
     """Entry point for prometheus_speedtest.py."""
+    del argv  # unused
+    if FLAGS.version:
+        print('prometheus_speedtest v%s' % version.__version__)
+        return
+
     registry = core.CollectorRegistry(auto_describe=False)
     registry.register(SpeedtestCollector())
     metrics_handler = prometheus_client.MetricsHandler.factory(registry)
@@ -132,9 +120,10 @@ def main():
     server = _ThreadingSimpleServer((FLAGS.address, FLAGS.port),
                                     metrics_handler)
 
-    logging.info('Starting HTTP server on port %s', FLAGS.port)
+    logging.info('Starting HTTP server listening on %s:%s', FLAGS.address,
+                 FLAGS.port)
     server.serve_forever()
 
 
 if __name__ == '__main__':
-    main()
+    app.run(main)

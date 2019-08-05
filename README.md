@@ -37,16 +37,17 @@ These instructions will install and run `prometheus_speedtest` on your system.
 #### Usage
 
 ```
-usage: prometheus_speedtest [-h] [-a address] [-p port] [-v]
-
 Instrument speedtest.net speedtests from Prometheus.
+flags:
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -a address, --address address
-                        address to listen on (default: 0.0.0.0)
-  -p port, --port port  port to listen on (default: 9516)
-  -v, --version         show version information and exit
+prometheus_speedtest.py:
+  --address: address to listen on
+    (default: '0.0.0.0')
+  --port: port to listen on
+    (default: '9516')
+    (an integer)
+  --[no]version: show version
+    (default: 'false')
 ```
 
 ### Running with Docker

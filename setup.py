@@ -49,7 +49,7 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     install_requires=[
-        'glog==0.3.1',
+        'absl-py==0.7.1',
         'mock==3.0.5',
         'prometheus_client==0.7.1',
         'speedtest-cli==2.1.1',
