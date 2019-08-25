@@ -1,6 +1,6 @@
 global:
-  scrape_interval: 45s
-  scrape_timeout: 45s
+  scrape_interval: 2m
+  scrape_timeout: 2m
 
 scrape_configs:
 - job_name: 'speedtest'
