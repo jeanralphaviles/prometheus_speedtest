@@ -9,6 +9,6 @@ COPY prometheus_speedtest/ /prometheus_speedtest/
 
 EXPOSE 9516/tcp
 ENTRYPOINT [ \
-    "dumb-init", "python", "-m", "prometheus_speedtest.prometheus_speedtest" \
+    "python", "-m", "prometheus_speedtest.prometheus_speedtest" \
 ]
 CMD [ "--port=9516" ]
