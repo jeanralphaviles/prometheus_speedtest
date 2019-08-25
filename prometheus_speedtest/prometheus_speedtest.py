@@ -104,6 +104,10 @@ class _ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
     http.server.ThreadingHTTPServer is new to Python 3.7, create our own for
     backwards-compatibility.
     """
+    # Allow Python to exit before all threads have terminated. This speeds up
+    # shutdown and also prevents a memory leak as Python is keeping track of
+    # all threads ever spawned.
+    daemon_threads = True
 
 
 def main(argv):
