@@ -84,7 +84,7 @@ to start instrumenting Speedtests and recording their metrics.
 
 ```yaml
 global:
-  scrape_timeout: 60s
+  scrape_timeout: 2m
 
 scrape_configs:
 - job_name: 'speedtest'
