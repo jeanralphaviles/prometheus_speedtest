@@ -1,9 +1,11 @@
-#!/usr/bin/python3
+#!/usr/bin/python3.7
 """Instrument speedtest.net speedtests from Prometheus."""
 
-from __future__ import print_function
-
+from http.server import SimpleHTTPRequestHandler
+from http.server import ThreadingHTTPServer
+from urllib.parse import urlparse
 import os
+
 from absl import app
 from absl import flags
 from absl import logging
@@ -12,18 +14,6 @@ import prometheus_client
 import speedtest
 
 from . import version
-
-try:
-    from http.server import HTTPServer
-    from http.server import SimpleHTTPRequestHandler
-    from socketserver import ThreadingMixIn
-    from urllib.parse import urlparse
-except ImportError:
-    # Python 2
-    from BaseHTTPServer import HTTPServer
-    from SimpleHTTPServer import SimpleHTTPRequestHandler
-    from SocketServer import ThreadingMixIn
-    from urlparse import urlparse
 
 flags.DEFINE_string('address', '0.0.0.0', 'address to listen on')
 flags.DEFINE_integer('port', 9516, 'port to listen on')
@@ -103,21 +93,14 @@ class SpeedtestCollector():
         yield bytes_sent
 
 
-class _ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
-    """Thread per request HTTP server.
-
-    http.server.ThreadingHTTPServer is new to Python 3.7, create our own for
-    backwards-compatibility.
-    """
-    # Allow Python to exit before all threads have terminated. This speeds up
-    # shutdown and also prevents a memory leak as Python is keeping track of
-    # all threads ever spawned.
-    daemon_threads = True
-
-
 class SpeedtestMetricsHandler(SimpleHTTPRequestHandler,
                               prometheus_client.MetricsHandler):
     """HTTP handler extending MetricsHandler and adding status page support."""
+    def __init__(self, *args, **kwargs):
+        static_directory = os.path.join(os.path.dirname(__file__), 'static')
+        super(SpeedtestMetricsHandler,
+              self).__init__(directory=static_directory, *args, **kwargs)
+
     def do_GET(self):
         """Handles HTTP GET requests.
 
@@ -142,12 +125,7 @@ def main(argv):
     registry.register(SpeedtestCollector())
     metrics_handler = SpeedtestMetricsHandler.factory(registry)
 
-    server = _ThreadingSimpleServer((FLAGS.address, FLAGS.port),
-                                    metrics_handler)
-    # SimpleHTTPRequestHandler added support for a directory argument in Python
-    # 3.7. Change directory here for backwards compatibility with older
-    # versions of Python.
-    os.chdir(os.path.join(os.path.dirname(__file__), 'static'))
+    server = ThreadingHTTPServer((FLAGS.address, FLAGS.port), metrics_handler)
 
     logging.info('Starting HTTP server listening on %s:%s', FLAGS.address,
                  FLAGS.port)
