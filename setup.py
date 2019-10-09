@@ -29,7 +29,6 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: System :: Monitoring',
         'Topic :: System :: Networking :: Monitoring',
-        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python',
     ],

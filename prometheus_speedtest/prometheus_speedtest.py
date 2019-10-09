@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3
 """Instrument speedtest.net speedtests from Prometheus."""
 
 from http.server import SimpleHTTPRequestHandler
