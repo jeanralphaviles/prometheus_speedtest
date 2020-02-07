@@ -269,6 +269,22 @@ pylint **/*.py
    twine upload dist/*
    ```
 
+### Deploying multi-architecture images to Docker Hub
+
+1. Ensure that Docker >= 19.03 and
+   [docker buildx](https://docs.docker.com/buildx/working-with-buildx/) is
+   installed.
+
+1. Build and push the new image.
+
+   ```shell
+   # Ensure you have run 'docker login'
+   export DOCKER_CLI_EXPERIMENTAL=enabled
+   docker buildx create --use --name my-builder
+   docker buildx build --push --platform linux/amd64,linux/arm64,linux/arm/v7 \
+       -t jraviles/prometheus_speedtest:latest .
+   ```
+
 ## Authors
 
 * Jean-Ralph Aviles
