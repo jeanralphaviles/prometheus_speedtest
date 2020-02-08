@@ -5,8 +5,10 @@ services:
   - docker
 install:
   - pip install pylint yapf -r requirements.txt
+  - gem install mdl
 script:
   - docker build .
   - pylint **/*.py
   - pytest
   - yapf -d **/*.py
+  - mdl README.md
