@@ -8,7 +8,8 @@ install:
   - pip install pylint yapf -r requirements.txt
   - gem install mdl
 script:
-  - docker build .
+  - docker build -t jraviles/prometheus_speedtest:latest .
+  - docker run --rm jraviles/prometheus_speedtest:latest --version
   - pylint **/*.py
   - pytest
   - yapf -d **/*.py
