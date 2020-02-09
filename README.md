@@ -195,13 +195,13 @@ your local machine for development and testing purposes.
    are installed with `pip`
 
    ```python
-   pip install -r requirements.txt
+   pip3 install -r requirements.txt
    ```
 
 1. Run `prometheus_speedtest`
 
    ```python
-   python -m prometheus_speedtest.prometheus_speedtest
+   python3 -m prometheus_speedtest.prometheus_speedtest
    ```
 
 #### Docker

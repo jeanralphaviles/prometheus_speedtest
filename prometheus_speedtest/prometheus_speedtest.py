@@ -1,8 +1,7 @@
 #!/usr/bin/python3.7
 """Instrument speedtest.net speedtests from Prometheus."""
 
-from http.server import SimpleHTTPRequestHandler
-from http.server import ThreadingHTTPServer
+from http import server
 from urllib.parse import urlparse
 import os
 
@@ -13,7 +12,7 @@ from prometheus_client import core
 import prometheus_client
 import speedtest
 
-from . import version
+from prometheus_speedtest import version
 
 flags.DEFINE_string('address', '0.0.0.0', 'address to listen on')
 flags.DEFINE_integer('port', 9516, 'port to listen on')
@@ -93,7 +92,7 @@ class SpeedtestCollector():
         yield bytes_sent
 
 
-class SpeedtestMetricsHandler(SimpleHTTPRequestHandler,
+class SpeedtestMetricsHandler(server.SimpleHTTPRequestHandler,
                               prometheus_client.MetricsHandler):
     """HTTP handler extending MetricsHandler and adding status page support."""
     def __init__(self, *args, **kwargs):
@@ -111,7 +110,7 @@ class SpeedtestMetricsHandler(SimpleHTTPRequestHandler,
         if path == '/probe':
             prometheus_client.MetricsHandler.do_GET(self)
         else:
-            SimpleHTTPRequestHandler.do_GET(self)
+            server.SimpleHTTPRequestHandler.do_GET(self)
 
 
 def main(argv):
@@ -123,13 +122,13 @@ def main(argv):
 
     registry = core.CollectorRegistry(auto_describe=False)
     registry.register(SpeedtestCollector())
-    metrics_handler = SpeedtestMetricsHandler.factory(registry)
+    metrics_handler = server.SpeedtestMetricsHandler.factory(registry)
 
-    server = ThreadingHTTPServer((FLAGS.address, FLAGS.port), metrics_handler)
+    s = ThreadingHTTPServer((FLAGS.address, FLAGS.port), metrics_handler)
 
     logging.info('Starting HTTP server listening on %s:%s', FLAGS.address,
                  FLAGS.port)
-    server.serve_forever()
+    s.serve_forever()
 
 
 if __name__ == '__main__':
