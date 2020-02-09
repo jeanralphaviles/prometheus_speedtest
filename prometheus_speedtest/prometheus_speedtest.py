@@ -117,18 +117,19 @@ def main(argv):
     """Entry point for prometheus_speedtest.py."""
     del argv  # unused
     if FLAGS.version:
-        print('prometheus_speedtest v%s' % version.__version__)
+        print('prometheus_speedtest v%s' % version.VERSION)
         return
 
     registry = core.CollectorRegistry(auto_describe=False)
     registry.register(SpeedtestCollector())
-    metrics_handler = server.SpeedtestMetricsHandler.factory(registry)
+    metrics_handler = SpeedtestMetricsHandler.factory(registry)
 
-    s = ThreadingHTTPServer((FLAGS.address, FLAGS.port), metrics_handler)
+    http = server.ThreadingHTTPServer((FLAGS.address, FLAGS.port),
+                                      metrics_handler)
 
     logging.info('Starting HTTP server listening on %s:%s', FLAGS.address,
                  FLAGS.port)
-    s.serve_forever()
+    http.serve_forever()
 
 
 if __name__ == '__main__':

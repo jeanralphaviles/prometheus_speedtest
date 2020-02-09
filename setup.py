@@ -4,6 +4,8 @@ import os
 from setuptools import setup
 from setuptools import find_packages
 
+from prometheus_speedtest import version
+
 
 def read_file(rel_path):
     """Reads a relative file, returns contents as a string.
@@ -14,8 +16,6 @@ def read_file(rel_path):
     here = os.path.abspath(os.path.dirname(__file__))
     with open(os.path.join(here, rel_path), 'r') as rel_file:
         return rel_file.read().strip()
-
-exec(read_file('prometheus_speedtest/version.py'))
 
 setup(
     name='prometheus_speedtest',
@@ -55,4 +55,4 @@ setup(
     py_modules=['prometheus_speedtest'],
     setup_requires=['setuptools>=38.6.0'],
     url='https://github.com/jeanralphaviles/prometheus_speedtest',
-    version=__version__)
+    version=version.VERSION)
