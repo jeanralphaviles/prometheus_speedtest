@@ -132,5 +132,10 @@ def main(argv):
     http.serve_forever()
 
 
-if __name__ == '__main__':
+def init():
+    """Initializes the prometheus_speedtest cli."""
     app.run(main)
+
+
+if __name__ == '__main__':
+    init()

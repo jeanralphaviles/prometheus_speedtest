@@ -10,6 +10,8 @@ install:
 script:
   - docker build -t jraviles/prometheus_speedtest:latest .
   - docker run --rm jraviles/prometheus_speedtest:latest --version
+  # Issue #19
+  - python -c 'from prometheus_speedtest import prometheus_speedtest as p; p.FLAGS.version = True; p.init()'
   - pylint **/*.py
   - pytest
   - yapf -d **/*.py

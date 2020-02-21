@@ -37,7 +37,7 @@ setup(
     entry_points={
         'console_scripts': [
             ('prometheus_speedtest='
-             'prometheus_speedtest.prometheus_speedtest:main'),
+             'prometheus_speedtest.prometheus_speedtest:init'),
         ],
     },
     include_package_data=True,
