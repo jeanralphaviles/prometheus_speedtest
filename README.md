@@ -283,6 +283,7 @@ pylint **/*.py
    docker buildx create --use --name my-builder
    docker buildx build --push --platform linux/amd64,linux/arm64,linux/arm/v7 \
        -t jraviles/prometheus_speedtest:latest .
+   docker buildx rm my-builder
    ```
 
 ## Authors
