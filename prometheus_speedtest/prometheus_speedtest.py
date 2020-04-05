@@ -45,7 +45,7 @@ class PrometheusSpeedtest():
         client = speedtest.Speedtest(source_address=self._source_address,
                                      timeout=self._timeout)
         if self._server > 0:
-            client.get_servers(servers=self._server)
+            client.get_servers(servers=[self._server])
         client.get_best_server()
         client.download()
         client.upload()
