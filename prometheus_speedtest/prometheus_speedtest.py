@@ -16,14 +16,14 @@ from prometheus_speedtest import version
 
 flags.DEFINE_string('address', '0.0.0.0', 'address to listen on')
 flags.DEFINE_integer('port', 9516, 'port to listen on')
-flags.DEFINE_integer('server', 0, 'speedtest server to use - use 0 for auto-selection')
+flags.DEFINE_multi_integer('servers', [], 'speedtest server(s) to use - leave empty for auto-selection')
 flags.DEFINE_boolean('version', False, 'show version')
 FLAGS = flags.FLAGS
 
 
 class PrometheusSpeedtest():
     """Enapsulates behavior performing and reporting results of speedtests."""
-    def __init__(self, source_address=None, timeout=10, server=0):
+    def __init__(self, source_address=None, timeout=10, servers=[]):
         """Instantiates a PrometheusSpeedtest object.
 
         Args:
@@ -33,7 +33,7 @@ class PrometheusSpeedtest():
         """
         self._source_address = source_address
         self._timeout = timeout
-        self._server = server
+        self._servers = servers
 
     def test(self):
         """Performs speedtest, returns results.
@@ -44,8 +44,7 @@ class PrometheusSpeedtest():
         logging.info('Performing Speedtest')
         client = speedtest.Speedtest(source_address=self._source_address,
                                      timeout=self._timeout)
-        if self._server > 0:
-            client.get_servers(servers=[self._server])
+        client.get_servers(servers=self._servers)
         client.get_best_server()
         client.download()
         client.upload()
@@ -55,14 +54,14 @@ class PrometheusSpeedtest():
 
 class SpeedtestCollector():
     """Performs Speedtests when requested from Prometheus."""
-    def __init__(self, tester=None, server=0):
+    def __init__(self, tester=None, servers=[]):
         """Instantiates a SpeedtestCollector object.
 
         Args:
             tester: An instantiated PrometheusSpeedtest object for testing.
-            server: server-id to use when tester is auto-created
+            servers: servers-id to use when tester is auto-created
         """
-        self._tester = tester if tester else PrometheusSpeedtest(server=server)
+        self._tester = tester if tester else PrometheusSpeedtest(servers=servers)
 
     def collect(self):
         """Performs a Speedtests and yields metrics.
@@ -126,7 +125,7 @@ def main(argv):
         return
 
     registry = core.CollectorRegistry(auto_describe=False)
-    registry.register(SpeedtestCollector(server=FLAGS.server))
+    registry.register(SpeedtestCollector(servers=FLAGS.servers))
     metrics_handler = SpeedtestMetricsHandler.factory(registry)
 
     http = server.ThreadingHTTPServer((FLAGS.address, FLAGS.port),
