@@ -16,14 +16,14 @@ from prometheus_speedtest import version
 
 flags.DEFINE_string('address', '0.0.0.0', 'address to listen on')
 flags.DEFINE_integer('port', 9516, 'port to listen on')
-flags.DEFINE_multi_integer('servers', [], 'speedtest server(s) to use - leave empty for auto-selection')
+flags.DEFINE_list('servers', None, 'speedtest server(s) to use - leave empty for auto-selection')
 flags.DEFINE_boolean('version', False, 'show version')
 FLAGS = flags.FLAGS
 
 
 class PrometheusSpeedtest():
     """Enapsulates behavior performing and reporting results of speedtests."""
-    def __init__(self, source_address=None, timeout=10, servers=[]):
+    def __init__(self, source_address=None, timeout=10, servers=None):
         """Instantiates a PrometheusSpeedtest object.
 
         Args:
@@ -54,7 +54,7 @@ class PrometheusSpeedtest():
 
 class SpeedtestCollector():
     """Performs Speedtests when requested from Prometheus."""
-    def __init__(self, tester=None, servers=[]):
+    def __init__(self, tester=None, servers=None):
         """Instantiates a SpeedtestCollector object.
 
         Args:
