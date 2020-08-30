@@ -16,7 +16,9 @@ from prometheus_speedtest import version
 
 flags.DEFINE_string('address', '0.0.0.0', 'address to listen on')
 flags.DEFINE_integer('port', 9516, 'port to listen on')
-flags.DEFINE_list('servers', None, 'speedtest server(s) to use - leave empty for auto-selection')
+flags.DEFINE_list(
+    'servers', None,
+    'speedtest server(s) to use - leave empty for auto-selection')
 flags.DEFINE_boolean('version', False, 'show version')
 FLAGS = flags.FLAGS
 
@@ -61,7 +63,8 @@ class SpeedtestCollector():
             tester: An instantiated PrometheusSpeedtest object for testing.
             servers: servers-id to use when tester is auto-created
         """
-        self._tester = tester if tester else PrometheusSpeedtest(servers=servers)
+        self._tester = tester if tester else PrometheusSpeedtest(
+            servers=servers)
 
     def collect(self):
         """Performs a Speedtests and yields metrics.
@@ -101,8 +104,9 @@ class SpeedtestMetricsHandler(server.SimpleHTTPRequestHandler,
     """HTTP handler extending MetricsHandler and adding status page support."""
     def __init__(self, *args, **kwargs):
         static_directory = os.path.join(os.path.dirname(__file__), 'static')
-        super(SpeedtestMetricsHandler,
-              self).__init__(directory=static_directory, *args, **kwargs)
+        # pylint: disable=unexpected-keyword-arg
+        super().__init__(directory=static_directory, *args, **kwargs)
+        # pylint: enable=unexpected-keyword-arg
 
     def do_GET(self):
         """Handles HTTP GET requests.
