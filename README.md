@@ -253,7 +253,7 @@ pylint **/*.py
 ### Deploying to PyPi
 
 1. Increment version number in
-   [version.txt](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/prometheus_speedtest/version.py)
+   [version.py](https://github.com/jeanralphaviles/prometheus_speedtest/blob/master/prometheus_speedtest/version.py)
 
 1. Create PyPi package
 
