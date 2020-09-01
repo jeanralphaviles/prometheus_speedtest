@@ -43,14 +43,15 @@ class PrometheusSpeedtest():
         Returns:
             speedtest.SpeedtestResults object.
         """
-        logging.info('Performing Speedtest')
+        logging.info('Performing Speedtest...')
         client = speedtest.Speedtest(source_address=self._source_address,
                                      timeout=self._timeout)
-        client.get_servers(servers=self._servers)
-        client.get_best_server()
+        logging.debug('Eligible servers: %s',
+                      client.get_servers(servers=self._servers))
+        logging.debug('Picked server: %s', client.get_best_server())
         client.download()
         client.upload()
-        logging.info(client.results)
+        logging.info('Results: %s', client.results)
         return client.results
 
 
@@ -114,6 +115,7 @@ class SpeedtestMetricsHandler(server.SimpleHTTPRequestHandler,
         Requests to '/probe' are handled by prometheus_client.MetricsHandler,
         other requests serve static HTML.
         """
+        logging.info('%s - %s', self.requestline, self.client_address)
         path = urlparse(self.path).path
         if path == '/probe':
             prometheus_client.MetricsHandler.do_GET(self)
