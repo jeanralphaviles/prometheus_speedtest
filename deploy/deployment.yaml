@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speedtest
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: speedtest
+  template:
+    metadata:
+      labels:
+        app: speedtest
+      annotations:
+        prometheus.io/path: /probe
+        prometheus.io/port: "9516"
+        prometheus.io/scrape-slow: "true"
+    spec:
+      containers:
+      - name: speedtest
+        image: jraviles/prometheus_speedtest:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 9516
+            name: http
+            protocol: TCP
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: 500Mi
+          requests:
+            cpu: 50m
+            memory: 20Mi
