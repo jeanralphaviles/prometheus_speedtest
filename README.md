@@ -60,6 +60,25 @@ on [Docker Hub](https://hub.docker.com/r/jraviles/prometheus_speedtest)
 docker run --rm -d --name prometheus_speedtest -p 9516:9516/tcp jraviles/prometheus_speedtest:latest
 ```
 
+### Running with Kubernetes
+
+Since you can run this from a Docker container, you can also run it in Kubernetes.
+
+```shell
+kubectl apply -f deploy/namespace.yaml
+kubectl apply -f deploy/deployment.yaml
+```
+
+The Kubernetes YAML files are pre-configured to work with the
+`kubernetes-pods-slow` job that comes with Prometheus, which is configured with
+5m scrape times and 30s timeouts.  If you need to raise the timeout, you'll
+need to change that in your Prometheus config map.
+
+Just keep in mind, that if you increase the replica count, then Prometheus will
+run a speedtest for each pod, every 5m. The same goes for if you are running
+more than one replica of Prometheus, as each replica independently scrapes
+targets.
+
 ### Integrating with Prometheus
 
 `prometheus_speedtest` is best when paired with
