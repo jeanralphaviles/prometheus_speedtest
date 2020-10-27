@@ -15,7 +15,7 @@ class PrometheusSpeedtestTest(unittest.TestCase):
     """Tests prometheus_speedtest.PrometheusSpeedtest."""
 
     _results = collections.namedtuple('Results',
-                                      ['download', 'upload', 'ping'])
+                                      ['download', 'upload', 'ping', 'server'])
 
     @mock.patch.object(speedtest, 'Speedtest', autospec=True)
     def test_test(self, mock_speedtest):
@@ -23,7 +23,7 @@ class PrometheusSpeedtestTest(unittest.TestCase):
         tester = prometheus_speedtest.PrometheusSpeedtest(
             source_address='4.3.2.1', timeout=10)
 
-        expected = PrometheusSpeedtestTest._results(10, 5, 30)
+        expected = PrometheusSpeedtestTest._results(10, 5, 30, {'id': '1'})
         mock_speedtest.return_value.results = expected
 
         self.assertEqual(tester.test(), expected)
@@ -38,9 +38,9 @@ class PrometheusSpeedtestTest(unittest.TestCase):
 class SpeedtestCollectorTest(unittest.TestCase):
     """Tests prometheus_speedtest.SpeedtestCollector."""
 
-    _results = collections.namedtuple(
-        'Results',
-        ['download', 'upload', 'ping', 'bytes_received', 'bytes_sent'])
+    _results = collections.namedtuple('Results', [
+        'download', 'upload', 'ping', 'bytes_received', 'bytes_sent', 'server'
+    ])
 
     @staticmethod
     @mock.patch.object(prometheus_client.core.GaugeMetricFamily, 'add_metric')
@@ -50,14 +50,16 @@ class SpeedtestCollectorTest(unittest.TestCase):
             prometheus_speedtest.PrometheusSpeedtest)
         collector = prometheus_speedtest.SpeedtestCollector(mock_tester)
 
-        speedtest_results = [10, 5, 30, 100, 20]
+        speedtest_results = [10, 5, 30, 100, 20, {'id': '1'}]
         mock_tester.test.return_value = SpeedtestCollectorTest._results(
             *speedtest_results)
 
         collections.deque(collector.collect())
 
-        mock_metric.assert_has_calls(
-            [mock.call(labels=[], value=value) for value in speedtest_results])
+        mock_metric.assert_has_calls([
+            mock.call(labels=['1'], value=value) for value in speedtest_results
+            if isinstance(value, int)
+        ])
 
 
 if __name__ == '__main__':

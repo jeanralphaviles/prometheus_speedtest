@@ -75,28 +75,41 @@ class SpeedtestCollector():
         """
         results = self._tester.test()
 
+        mertic_labels = ['server_id']
+        mertic_label_values = [results.server['id']]
+
         download_speed = core.GaugeMetricFamily('download_speed_bps',
-                                                'Download speed (bit/s)')
-        download_speed.add_metric(labels=[], value=results.download)
+                                                'Download speed (bit/s)',
+                                                labels=mertic_labels)
+        download_speed.add_metric(labels=mertic_label_values,
+                                  value=results.download)
         yield download_speed
 
         upload_speed = core.GaugeMetricFamily('upload_speed_bps',
-                                              'Upload speed (bit/s)')
-        upload_speed.add_metric(labels=[], value=results.upload)
+                                              'Upload speed (bit/s)',
+                                              labels=mertic_labels)
+        upload_speed.add_metric(labels=mertic_label_values,
+                                value=results.upload)
         yield upload_speed
 
-        ping = core.GaugeMetricFamily('ping_ms', 'Latency (ms)')
-        ping.add_metric(labels=[], value=results.ping)
+        ping = core.GaugeMetricFamily('ping_ms',
+                                      'Latency (ms)',
+                                      labels=mertic_labels)
+        ping.add_metric(labels=mertic_label_values, value=results.ping)
         yield ping
 
         bytes_received = core.GaugeMetricFamily('bytes_received',
-                                                'Bytes received during test')
-        bytes_received.add_metric(labels=[], value=results.bytes_received)
+                                                'Bytes received during test',
+                                                labels=mertic_labels)
+        bytes_received.add_metric(labels=mertic_label_values,
+                                  value=results.bytes_received)
         yield bytes_received
 
         bytes_sent = core.GaugeMetricFamily('bytes_sent',
-                                            'Bytes sent during test')
-        bytes_sent.add_metric(labels=[], value=results.bytes_sent)
+                                            'Bytes sent during test',
+                                            labels=mertic_labels)
+        bytes_sent.add_metric(labels=mertic_label_values,
+                              value=results.bytes_sent)
         yield bytes_sent
 
 
