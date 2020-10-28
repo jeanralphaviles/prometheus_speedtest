@@ -43,9 +43,13 @@ flags:
 prometheus_speedtest.py:
   --address: address to listen on
     (default: '0.0.0.0')
+  --excludes: speedtest server(s) to exclude - leave empty for no exclusion
+    (a comma separated list)
   --port: port to listen on
     (default: '9516')
     (an integer)
+  --servers: speedtest server(s) to use - leave empty for auto-selection
+    (a comma separated list)
   --[no]version: show version
     (default: 'false')
 ```
