@@ -26,3 +26,5 @@
 /build
 # pytest
 .cache/
+# pytype
+.pytype/
