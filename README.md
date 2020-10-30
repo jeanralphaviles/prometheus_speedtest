@@ -265,6 +265,7 @@ config has been provided.
 ```shell
 yapf -i **/*.py
 pylint **/*.py
+pytype
 ```
 
 ## Maintenance
