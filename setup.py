@@ -1,8 +1,7 @@
 """Build script for setuptools, used to create PyPi package."""
 import os
 
-from setuptools import setup
-from setuptools import find_packages
+from setuptools import find_packages, setup
 
 from prometheus_speedtest import version
 
@@ -14,7 +13,7 @@ def read_file(rel_path):
       rel_path: relative file path, string.
     """
     here = os.path.abspath(os.path.dirname(__file__))
-    with open(os.path.join(here, rel_path), 'r') as rel_file:
+    with open(os.path.join(here, rel_path), "r") as rel_file:
         return rel_file.read().strip()
 
 
