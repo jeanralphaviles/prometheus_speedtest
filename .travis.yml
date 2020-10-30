@@ -5,7 +5,7 @@ python:
 services:
   - docker
 install:
-  - pip install pylint yapf -r requirements.txt
+  - pip install pylint pytype yapf -r requirements.txt
   - gem install mdl
 script:
   - docker build -t jraviles/prometheus_speedtest:latest .
@@ -14,5 +14,6 @@ script:
   - python -c 'from prometheus_speedtest import prometheus_speedtest as p; p.FLAGS.version = True; p.init()'
   - pylint **/*.py
   - pytest
+  - pytype
   - yapf -d **/*.py
   - mdl README.md
