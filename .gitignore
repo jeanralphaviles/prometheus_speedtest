@@ -28,3 +28,5 @@
 .cache/
 # pytype
 .pytype/
+# snap
+*.snap
