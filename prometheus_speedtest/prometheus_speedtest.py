@@ -1,6 +1,8 @@
 #!/usr/bin/python3.7
 """Instrument speedtest.net speedtests from Prometheus."""
 
+from typing import Optional
+from typing import Sequence
 from http import server
 from urllib.parse import urlparse
 import os
@@ -29,16 +31,18 @@ FLAGS = flags.FLAGS
 class PrometheusSpeedtest():
     """Enapsulates behavior performing and reporting results of speedtests."""
     def __init__(self,
-                 source_address=None,
-                 timeout=10,
-                 servers=None,
-                 excludes=None):
+                 source_address: Optional[str] = None,
+                 timeout: int = 10,
+                 servers: Optional[Sequence[str]] = None,
+                 excludes: Optional[Sequence[str]] = None):
         """Instantiates a PrometheusSpeedtest object.
 
         Args:
             source_address: str - optional network address to bind to.
                 e.g. 192.168.1.1.
             timeout: int - optional timeout for speedtest in seconds.
+            servers: list of speedtest server ids to restrict testing to.
+            servers: list of speedtest server ids to exclude testing from.
         """
         self._source_address = source_address
         self._timeout = timeout
@@ -66,7 +70,10 @@ class PrometheusSpeedtest():
 
 class SpeedtestCollector():
     """Performs Speedtests when requested from Prometheus."""
-    def __init__(self, tester=None, servers=None, excludes=None):
+    def __init__(self,
+                 tester: Optional[PrometheusSpeedtest] = None,
+                 servers: Optional[Sequence[str]] = None,
+                 excludes: Optional[Sequence[str]] = None):
         """Instantiates a SpeedtestCollector object.
 
         Args:
