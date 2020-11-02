@@ -140,6 +140,10 @@ def main(argv):
         return
 
     registry = core.CollectorRegistry(auto_describe=False)
+    if set(FLAGS.servers).issubset(FLAGS.excludes):
+        logging.fatal(
+            '--servers is a subset of --excludes, no viable test server is configured.  '
+            + 'Ensure excludes does not exclude all servers.')
     registry.register(
         SpeedtestCollector(servers=FLAGS.servers, excludes=FLAGS.excludes))
     metrics_handler = SpeedtestMetricsHandler.factory(registry)
