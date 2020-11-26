@@ -64,6 +64,14 @@ on [Docker Hub](https://hub.docker.com/r/jraviles/prometheus_speedtest)
 docker run --rm -d --name prometheus_speedtest -p 9516:9516/tcp jraviles/prometheus_speedtest:latest
 ```
 
+You can also append extra flags when running with Docker. For example:
+
+```shell
+$ docker run --rm --name prometheus_speedtest -p 9516:9516/tcp \
+    jraviles/prometheus_speedtest:latest --version
+prometheus_speedtest v0.9.5
+```
+
 ### Running with Kubernetes
 
 Since you can run this from a Docker container, you can also run it in Kubernetes.
