@@ -13,7 +13,7 @@ FROM python:3.7-alpine
 COPY requirements.txt /
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN apk add --no-cache dumb-init
+RUN apk add --no-cache dumb-init libcurl libxml2 libstdc++ libgcc
 
 COPY prometheus_speedtest/ /prometheus_speedtest/
 COPY --from=compiler /build/SpeedTest /prometheus_speedtest/SpeedTest
