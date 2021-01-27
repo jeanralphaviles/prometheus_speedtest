@@ -12,6 +12,8 @@ from absl import flags
 from absl import logging
 from prometheus_client import core
 import prometheus_client
+import subprocess
+import json
 
 from prometheus_speedtest import version
 
