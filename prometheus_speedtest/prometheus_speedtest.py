@@ -57,11 +57,12 @@ class PrometheusSpeedtest():
             speedtest.SpeedtestResults object.
         """
         logging.info('Performing Speedtest...')
-        res = subprocess.run(["./SpeedTest", "--output", "json"], capture_output=True, stdin=None)
+        res = subprocess.run(["SpeedTest", "--output", "json"], capture_output=True, stdin=None)
         if res.returncode != 0:
           logging.error('Error running SpeedTest: %s', res.stderr)
+          return None
         results = json.loads(res.stdout.decode())
-        logging.debug('Picked server: %s by %s (%.2f km, %.2f ping)', results['server']['name'], results['server']['sponsor'], results['server']['d'], results['server']['latency'])
+        logging.debug('Picked server: %s by %s (%.2f km, %.2f ping)', results['server']['name'], results['server']['sponsor'], results['server']['distance'], results['server']['latency'])
         logging.info('Results: %s', results)
         return results
 
@@ -91,27 +92,31 @@ class SpeedtestCollector():
 
         download_speed = core.GaugeMetricFamily('download_speed_bps',
                                                 'Download speed (bit/s)')
-        download_speed.add_metric(labels=[], value=results.download)
+        download_speed.add_metric(labels=[], value=results['download'])
         yield download_speed
 
         upload_speed = core.GaugeMetricFamily('upload_speed_bps',
                                               'Upload speed (bit/s)')
-        upload_speed.add_metric(labels=[], value=results.upload)
+        upload_speed.add_metric(labels=[], value=results['upload'])
         yield upload_speed
 
         ping = core.GaugeMetricFamily('ping_ms', 'Latency (ms)')
-        ping.add_metric(labels=[], value=results.ping)
+        ping.add_metric(labels=[], value=results['ping'])
         yield ping
 
-        bytes_received = core.GaugeMetricFamily('bytes_received',
-                                                'Bytes received during test')
-        bytes_received.add_metric(labels=[], value=results.bytes_received)
-        yield bytes_received
+        ping = core.GaugeMetricFamily('jitter_ms', 'Jitter (ms)')
+        ping.add_metric(labels=[], value=results['jitter'])
+        yield ping
 
-        bytes_sent = core.GaugeMetricFamily('bytes_sent',
-                                            'Bytes sent during test')
-        bytes_sent.add_metric(labels=[], value=results.bytes_sent)
-        yield bytes_sent
+        # bytes_received = core.GaugeMetricFamily('bytes_received',
+        #                                         'Bytes received during test')
+        # bytes_received.add_metric(labels=[], value=results.bytes_received)
+        # yield bytes_received
+
+        # bytes_sent = core.GaugeMetricFamily('bytes_sent',
+        #                                     'Bytes sent during test')
+        # bytes_sent.add_metric(labels=[], value=results.bytes_sent)
+        # yield bytes_sent
 
 
 class SpeedtestMetricsHandler(server.SimpleHTTPRequestHandler,
