@@ -12,7 +12,6 @@ from absl import flags
 from absl import logging
 from prometheus_client import core
 import prometheus_client
-import speedtest
 
 from prometheus_speedtest import version
 
@@ -56,16 +55,13 @@ class PrometheusSpeedtest():
             speedtest.SpeedtestResults object.
         """
         logging.info('Performing Speedtest...')
-        client = speedtest.Speedtest(source_address=self._source_address,
-                                     timeout=self._timeout)
-        logging.debug(
-            'Eligible servers: %s',
-            client.get_servers(servers=self._servers, exclude=self._excludes))
-        logging.debug('Picked server: %s', client.get_best_server())
-        client.download()
-        client.upload()
-        logging.info('Results: %s', client.results)
-        return client.results
+        res = subprocess.run(["./SpeedTest", "--output", "json"], capture_output=True, stdin=None)
+        if res.returncode != 0:
+          logging.error('Error running SpeedTest: %s', res.stderr)
+        results = json.loads(res.stdout.decode())
+        logging.debug('Picked server: %s by %s (%.2f km, %.2f ping)', results['server']['name'], results['server']['sponsor'], results['server']['d'], results['server']['latency'])
+        logging.info('Results: %s', results)
+        return results
 
 
 class SpeedtestCollector():
