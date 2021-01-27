@@ -57,7 +57,7 @@ class PrometheusSpeedtest():
             speedtest.SpeedtestResults object.
         """
         logging.info('Performing Speedtest...')
-        res = subprocess.run(["SpeedTest", "--output", "json"], capture_output=True, stdin=None)
+        res = subprocess.run(["/usr/local/bin/SpeedTest", "--output", "json"], capture_output=True, stdin=None)
         if res.returncode != 0:
           logging.error('Error running SpeedTest: %s', res.stderr)
           return None

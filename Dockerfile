@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN apk add --no-cache dumb-init libcurl libxml2 libstdc++ libgcc
 
 COPY prometheus_speedtest/ /prometheus_speedtest/
-COPY --from=compiler /build/SpeedTest /prometheus_speedtest/SpeedTest
+COPY --from=compiler /build/SpeedTest /usr/local/bin/SpeedTest
 
 EXPOSE 9516/tcp
 ENTRYPOINT [ \
