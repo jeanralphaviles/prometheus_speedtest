@@ -17,5 +17,6 @@ script:
   - pylint **/*.py
   - pytest
   - pytype
-  - yapf -d **/*.py
+  - yapf -d -r .
+  - pre-commit run -a
   - mdl README.md
