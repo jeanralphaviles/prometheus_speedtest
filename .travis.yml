@@ -1,12 +1,12 @@
 language: python
 os: linux
 python:
-  - "3.7"
+  - "3.9"
 services:
   - docker
 install:
   - pip install pylint pytype yapf -r requirements.txt
-  # TODO(jeanralphaviles): Remove when Travis' Ruby is updated.
+  -  # TODO(jeanralphaviles): Remove when Travis' Ruby is updated.
   - gem install chef-utils -v 16.6.14
   - gem install mdl
 script:
