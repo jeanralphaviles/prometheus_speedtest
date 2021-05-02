@@ -1,3 +1,3 @@
 """Prometheus Speedtest's version number."""
 
-VERSION = '0.9.5'
+VERSION = '0.9.6'
