@@ -1,0 +1,27 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+  - repo: https://github.com/pre-commit/mirrors-yapf
+    rev: v0.31.0
+    hooks:
+      - id: yapf
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+      - id: pytype
+        name: pytype
+        entry: pytype
+        args: []
+        language: system
+        types: [python]
+default_language_version:
+  python: python3
