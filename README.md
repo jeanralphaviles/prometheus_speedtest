@@ -280,6 +280,12 @@ pylint **/*.py
 pytype
 ```
 
+## Grafana Dashboard Template
+
+User Doğukan Çağatay has created a Grafana dashboard template for
+prometheus_speedtest. Go check it out on
+[grafana.com](https://grafana.com/grafana/dashboards/11229).
+
 ## Maintenance
 
 ### Deploying to PyPi
