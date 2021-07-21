@@ -5,7 +5,6 @@ Instrument [Speedtest.net](http://speedtest.net) tests from
 upload\_speed, and latency.
 
 [![Build Status](https://travis-ci.com/jeanralphaviles/prometheus_speedtest.svg?branch=master)](https://travis-ci.com/jeanralphaviles/prometheus_speedtest/branches)
-[![Docker Build Status](https://img.shields.io/docker/build/jraviles/prometheus_speedtest.svg)](https://hub.docker.com/r/jraviles/prometheus_speedtest/)
 [![PyPI status](https://img.shields.io/pypi/status/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
 [![PyPI version shields.io](https://img.shields.io/pypi/v/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
 [![PyPI license](https://img.shields.io/pypi/l/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
