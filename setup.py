@@ -14,7 +14,7 @@ def read_file(rel_path):
       rel_path: relative file path, string.
     """
     here = os.path.abspath(os.path.dirname(__file__))
-    with open(os.path.join(here, rel_path), 'r') as rel_file:
+    with open(os.path.join(here, rel_path), 'r', encoding='utf-8') as rel_file:
         return rel_file.read().strip()
 
 
