@@ -49,5 +49,16 @@ repos:
         args: []
         language: system
         types: [python]
+      - id: pytest
+        name: pytest
+        entry: pytest
+        language: system
+        types: [python]
+        exclude: 'setup.py'
+      - id: mdl
+        name: mdl
+        entry: mdl
+        language: system
+        types: [markdown]
 default_language_version:
   python: python3
