@@ -1,5 +1,5 @@
-pre-commit
-pylint
-pytest
-pytype
-yapf
+pre-commit==2.14.1
+pylint==2.10.2
+pytest==6.2.5
+pytype==2021.8.24
+yapf==0.31.0
