@@ -46,7 +46,6 @@ setup(
     packages=find_packages(),
     install_requires=[
         'absl-py==0.13.0',
-        'mock==4.0.3',
         'prometheus_client==0.11.0',
         'speedtest-cli==2.1.3',
     ],
