@@ -320,8 +320,11 @@ prometheus_speedtest. Go check it out on
    # https://github.com/docker/buildx/issues/495#issuecomment-754688157
    docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
    docker buildx create --use --name my-builder
+   TAG="$(python3 -m prometheus_speedtest.prometheus_speedtest --version \
+       | cut -d 'v' -f 2)"
    docker buildx build --push --platform linux/amd64,linux/arm64,linux/arm/v7 \
-       -t jraviles/prometheus_speedtest:latest .
+       -t jraviles/prometheus_speedtest:latest \
+       -t jraviles/prometheus_speedtest:${TAG:?} .
    docker buildx rm my-builder
    ```
 
