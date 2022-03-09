@@ -45,8 +45,8 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     install_requires=[
-        'absl-py==0.13.0',
-        'prometheus_client==0.11.0',
+        'absl-py==1.0.0',
+        'prometheus_client==0.13.1',
         'speedtest-cli==2.1.3',
     ],
     keywords=['prometheus', 'monitoring', 'speedtest', 'speedtest.net'],
