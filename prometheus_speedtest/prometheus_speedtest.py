@@ -144,7 +144,7 @@ def main(argv):
     """Entry point for prometheus_speedtest.py."""
     del argv  # unused
     if FLAGS.version:
-        print('prometheus_speedtest v%s' % version.VERSION)
+        print(f'prometheus_speedtest v{version.VERSION}')
         return
 
     registry = core.CollectorRegistry(auto_describe=False)
