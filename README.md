@@ -6,6 +6,7 @@ upload\_speed, and latency.
 
 [![Build Status](https://travis-ci.com/jeanralphaviles/prometheus_speedtest.svg?branch=master)](https://travis-ci.com/jeanralphaviles/prometheus_speedtest/branches)
 [![PyPI status](https://img.shields.io/pypi/status/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/jraviles/prometheus_speedtest)](https://hub.docker.com/r/jraviles/prometheus_speedtest)
 [![PyPI version shields.io](https://img.shields.io/pypi/v/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
 [![PyPI license](https://img.shields.io/pypi/l/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
