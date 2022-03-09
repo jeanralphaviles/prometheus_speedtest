@@ -31,6 +31,7 @@ FLAGS = flags.FLAGS
 
 class PrometheusSpeedtest():
     """Enapsulates behavior performing and reporting results of speedtests."""
+
     def __init__(self,
                  source_address: Optional[str] = None,
                  timeout: int = 10,
@@ -71,6 +72,7 @@ class PrometheusSpeedtest():
 
 class SpeedtestCollector():
     """Performs Speedtests when requested from Prometheus."""
+
     def __init__(self,
                  tester: Optional[PrometheusSpeedtest] = None,
                  servers: Optional[Sequence[str]] = None,
@@ -120,6 +122,7 @@ class SpeedtestCollector():
 class SpeedtestMetricsHandler(server.SimpleHTTPRequestHandler,
                               prometheus_client.MetricsHandler):
     """HTTP handler extending MetricsHandler and adding status page support."""
+
     def __init__(self, *args, **kwargs):
         static_directory = os.path.join(os.path.dirname(__file__), 'static')
         # pylint: disable=unexpected-keyword-arg
