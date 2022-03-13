@@ -69,7 +69,7 @@ You can also append extra flags when running with Docker. For example:
 ```shell
 $ docker run --rm --name prometheus_speedtest -p 9516:9516/tcp \
     jraviles/prometheus_speedtest:latest --version
-prometheus_speedtest v0.9.5
+prometheus_speedtest v0.9.9
 ```
 
 ### Running with Kubernetes
@@ -163,7 +163,7 @@ We'll start `prometheus` with this config.
 
 1. Query results
 
-   * Visit <http://localhost:9090>
+   * Visit <http://localhost:9090/probe>
 
    * Wait around **45 seconds** for Prometheus to perform a Speedtest
 
@@ -197,7 +197,7 @@ bytes_received 111342756.0
 bytes_sent 5242880.0
 ```
 
-You can also visit <http://localhost:9516> in your browser to see the same
+You can also visit <http://localhost:9516/probe> in your browser to see the same
 metrics.
 
 ### Default Port
@@ -255,7 +255,7 @@ your local machine for development and testing purposes.
 curl localhost:9516/probe
 ```
 
-Or visit <http://localhost:9516>
+Or visit <http://localhost:9516/probe>
 
 ### Running Unit Tests
 
