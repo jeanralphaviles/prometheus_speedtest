@@ -156,14 +156,14 @@ We'll start `prometheus` with this config.
 1. Start Prometheus
 
    ```shell
-   docker run --rm -d --net prometheus_network -p 9090:9090/tcp \
+   docker run --rm -d --net prometheus_network -p 9516:9516/tcp \
       -v $PWD/example/prometheus.yml:/etc/prometheus/prometheus.yml \
       --name prometheus prom/prometheus:latest
    ```
 
 1. Query results
 
-   * Visit <http://localhost:9090/probe>
+   * Visit <http://localhost:9516/probe>
 
    * Wait around **45 seconds** for Prometheus to perform a Speedtest
 
