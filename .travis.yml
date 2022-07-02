@@ -6,8 +6,6 @@ services:
   - docker
 install:
   - pip install -r requirements-dev.txt -r requirements.txt
-  # TODO(jeanralphaviles): Remove when Travis' Ruby is updated.
-  - gem install chef-utils -v 16.6.14
   - gem install mdl
 script:
   - docker build -t jraviles/prometheus_speedtest:latest .
