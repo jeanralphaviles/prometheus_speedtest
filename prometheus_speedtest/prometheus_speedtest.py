@@ -36,7 +36,7 @@ class PrometheusSpeedtest():
                  source_address: Optional[str] = None,
                  timeout: int = 10,
                  servers: Optional[Sequence[str]] = None,
-                 excludes: Optional[Sequence[str]] = None):
+                 excludes: Optional[Sequence[str]] = None) -> None:
         """Instantiates a PrometheusSpeedtest object.
 
         Args:
@@ -51,7 +51,7 @@ class PrometheusSpeedtest():
         self._servers = servers
         self._excludes = excludes
 
-    def test(self):
+    def test(self) -> speedtest.SpeedtestResults:
         """Performs speedtest, returns results.
 
         Returns:
@@ -76,7 +76,7 @@ class SpeedtestCollector():
     def __init__(self,
                  tester: Optional[PrometheusSpeedtest] = None,
                  servers: Optional[Sequence[str]] = None,
-                 excludes: Optional[Sequence[str]] = None):
+                 excludes: Optional[Sequence[str]] = None) -> None:
         """Instantiates a SpeedtestCollector object.
 
         Args:
@@ -86,7 +86,7 @@ class SpeedtestCollector():
         self._tester = tester if tester else PrometheusSpeedtest(
             servers=servers, excludes=excludes)
 
-    def collect(self):
+    def collect(self) -> core.Metric:
         """Performs a Speedtests and yields metrics.
 
         Yields:
@@ -123,13 +123,13 @@ class SpeedtestMetricsHandler(server.SimpleHTTPRequestHandler,
                               prometheus_client.MetricsHandler):
     """HTTP handler extending MetricsHandler and adding status page support."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         static_directory = os.path.join(os.path.dirname(__file__), 'static')
         # pylint: disable=unexpected-keyword-arg
         super().__init__(directory=static_directory, *args, **kwargs)
         # pylint: enable=unexpected-keyword-arg
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         """Handles HTTP GET requests.
 
         Requests to '/probe' are handled by prometheus_client.MetricsHandler,
