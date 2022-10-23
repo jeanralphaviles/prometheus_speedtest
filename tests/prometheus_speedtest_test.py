@@ -22,7 +22,7 @@ class PrometheusSpeedtestTest(unittest.TestCase):
     def test_test(self, mock_speedtest):
         """Ensures correctness of PrometheusSpeedtest.test()."""
         tester = prometheus_speedtest.PrometheusSpeedtest(
-            source_address='4.3.2.1', timeout=10, secure=True)
+            source_address='4.3.2.1', timeout=10)
 
         expected = PrometheusSpeedtestTest._results(10, 5, 30)
         mock_speedtest.return_value.results = expected
