@@ -5,6 +5,8 @@ python:
   - "3.9"
 services:
   - docker
+before_install:
+  - sudo apt install -y rustc cargo
 install:
   - pip install -r requirements-dev.txt -r requirements.txt
   # TODO(jeanralphaviles): Remove when Travis' Ruby is updated.
@@ -17,3 +19,6 @@ script:
   - python -c 'from prometheus_speedtest import prometheus_speedtest as p; p.FLAGS.version = True; p.init()'
   - pre-commit run -a
   - python setup.py sdist
+addons:
+  apt:
+    update: true
