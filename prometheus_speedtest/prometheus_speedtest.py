@@ -59,7 +59,8 @@ class PrometheusSpeedtest():
         """
         logging.info('Performing Speedtest...')
         client = speedtest.Speedtest(source_address=self._source_address,
-                                     timeout=self._timeout, secure=True)
+                                     timeout=self._timeout,
+                                     secure=True)
         logging.debug(
             'Eligible servers: %s',
             client.get_servers(servers=self._servers, exclude=self._excludes))
