@@ -55,7 +55,6 @@ setup(
     long_description_content_type='text/markdown',
     py_modules=['prometheus_speedtest'],
     setup_requires=['setuptools==62.6.0'],
-    extras_require={'dev': read_file('requirements-dev.txt')},
     url='https://github.com/jeanralphaviles/prometheus_speedtest',
     version=version.VERSION,
 )
