@@ -19,6 +19,7 @@ script:
   - python -c 'from prometheus_speedtest import prometheus_speedtest as p; p.FLAGS.version = True; p.init()'
   - pre-commit run -a
   - python setup.py sdist
+  - pip install dist/*
 addons:
   apt:
     update: true
