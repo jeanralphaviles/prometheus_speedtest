@@ -3,5 +3,5 @@ pre-commit==2.20.0
 pylint==2.15.5
 pytest==7.2.0
 pytype==2022.10.13
-setuptools==65.5.0
+setuptools==65.5.1
 yapf==0.32.0
