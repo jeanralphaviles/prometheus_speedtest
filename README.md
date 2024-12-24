@@ -4,7 +4,8 @@ Instrument [Speedtest.net](http://speedtest.net) tests from
 [Prometheus](https://prometheus.io). Provides metrics on download\_speed,
 upload\_speed, and latency.
 
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/jeanralphaviles/prometheus_speedtest/python.yml)](https://github.com/jeanralphaviles/prometheus_speedtest/actions/workflows/python.yml)
+[![test](https://github.com/jeanralphaviles/prometheus_speedtest/actions/workflows/python.yml/badge.svg)](https://github.com/jeanralphaviles/prometheus_speedtest/actions/workflows/python.yml)
+[![deploy](https://github.com/jeanralphaviles/prometheus_speedtest/actions/workflows/deploy.yml/badge.svg)](https://github.com/jeanralphaviles/prometheus_speedtest/actions/workflows/deploy.yml)
 [![PyPI status](https://img.shields.io/pypi/status/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/jraviles/prometheus_speedtest)](https://hub.docker.com/r/jraviles/prometheus_speedtest)
 [![PyPI version shields.io](https://img.shields.io/pypi/v/prometheus_speedtest.svg)](https://pypi.python.org/pypi/prometheus_speedtest/)

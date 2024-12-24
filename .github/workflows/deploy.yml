@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  pypi-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,7 +29,7 @@ jobs:
   pypi-publish:
     runs-on: ubuntu-latest
     needs:
-      - build
+      - pypi-build
     permissions:
       id-token: write
     environment:
@@ -45,3 +45,26 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist/
+          print-hash: true
+          skip-existing: true
+
+  docker-build:
+    runs-on: ubuntu-latest
+    environment:
+      name: dockerhub
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and Push
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true
+          tags: jraviles/prometheus_speedtest:latest,jraviles/prometheus_speedtest:${{ github.ref }}
