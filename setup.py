@@ -31,7 +31,7 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: System :: Monitoring',
         'Topic :: System :: Networking :: Monitoring',
-        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
         'Programming Language :: Python',
     ],
     description=('Performs speedtest-cli tests and pushes metrics to '
