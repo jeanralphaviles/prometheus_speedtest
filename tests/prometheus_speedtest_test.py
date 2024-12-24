@@ -4,8 +4,8 @@
 
 import collections
 import unittest
+import unittest.mock
 
-import mock
 import prometheus_client
 import speedtest
 
@@ -18,7 +18,7 @@ class PrometheusSpeedtestTest(unittest.TestCase):
     _results = collections.namedtuple('Results',
                                       ['download', 'upload', 'ping'])
 
-    @mock.patch.object(speedtest, 'Speedtest', autospec=True)
+    @unittest.mock.patch.object(speedtest, 'Speedtest', autospec=True)
     def test_test(self, mock_speedtest):
         """Ensures correctness of PrometheusSpeedtest.test()."""
         tester = prometheus_speedtest.PrometheusSpeedtest(
@@ -45,10 +45,11 @@ class SpeedtestCollectorTest(unittest.TestCase):
         ['download', 'upload', 'ping', 'bytes_received', 'bytes_sent'])
 
     @staticmethod
-    @mock.patch.object(prometheus_client.core.GaugeMetricFamily, 'add_metric')
+    @unittest.mock.patch.object(prometheus_client.core.GaugeMetricFamily,
+                                'add_metric')
     def test_collect(mock_metric):
         """Ensures correctness of SpeedtestCollector.collect()."""
-        mock_tester = mock.create_autospec(
+        mock_tester = unittest.mock.create_autospec(
             prometheus_speedtest.PrometheusSpeedtest)
         collector = prometheus_speedtest.SpeedtestCollector(mock_tester)
 
@@ -58,8 +59,10 @@ class SpeedtestCollectorTest(unittest.TestCase):
 
         collections.deque(collector.collect())
 
-        mock_metric.assert_has_calls(
-            [mock.call(labels=[], value=value) for value in speedtest_results])
+        mock_metric.assert_has_calls([
+            unittest.mock.call(labels=[], value=value)
+            for value in speedtest_results
+        ])
 
 
 if __name__ == '__main__':
