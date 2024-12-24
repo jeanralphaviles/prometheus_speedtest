@@ -31,7 +31,7 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: System :: Monitoring',
         'Topic :: System :: Networking :: Monitoring',
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.12',
         'Programming Language :: Python',
     ],
     description=('Performs speedtest-cli tests and pushes metrics to '
@@ -45,8 +45,8 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     install_requires=[
-        'absl-py==1.3.0',
-        'prometheus_client==0.15.0',
+        'absl-py==2.1.0',
+        'prometheus_client==0.21.1',
         'speedtest-cli==2.1.3',
     ],
     keywords=['prometheus', 'monitoring', 'speedtest', 'speedtest.net'],
@@ -54,7 +54,7 @@ setup(
     long_description=read_file('README.md'),
     long_description_content_type='text/markdown',
     py_modules=['prometheus_speedtest'],
-    setup_requires=['setuptools==65.6.3'],
+    setup_requires=['setuptools==75.6.0'],
     url='https://github.com/jeanralphaviles/prometheus_speedtest',
     version=version.VERSION,
 )
