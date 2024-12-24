@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
 """Prometheus Speedtest's version number."""
 
-VERSION = '0.9.14'
+VERSION = '0.9.15'
