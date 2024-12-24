@@ -317,7 +317,6 @@ prometheus_speedtest. Go check it out on
 
    ```shell
    # Ensure you have run 'docker login'
-   export DOCKER_CLI_EXPERIMENTAL=enabled
    # https://github.com/docker/buildx/issues/495#issuecomment-754688157
    docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
    docker buildx create --use --name my-builder
