@@ -54,7 +54,7 @@ setup(
     long_description=read_file('README.md'),
     long_description_content_type='text/markdown',
     py_modules=['prometheus_speedtest'],
-    setup_requires=['setuptools==75.6.0'],
+    setup_requires=['setuptools==78.1.1'],
     url='https://github.com/jeanralphaviles/prometheus_speedtest',
     version=version.VERSION,
 )
