@@ -7,7 +7,7 @@ import unittest
 import unittest.mock
 
 import prometheus_client
-import speedtest
+import speedtest  # type: ignore
 
 from prometheus_speedtest import prometheus_speedtest
 
@@ -15,7 +15,7 @@ from prometheus_speedtest import prometheus_speedtest
 class PrometheusSpeedtestTest(unittest.TestCase):
     """Tests prometheus_speedtest.PrometheusSpeedtest."""
 
-    _results = collections.namedtuple('Results',
+    _results = collections.namedtuple('_results',
                                       ['download', 'upload', 'ping'])
 
     @unittest.mock.patch.object(speedtest, 'Speedtest', autospec=True)
@@ -41,7 +41,7 @@ class SpeedtestCollectorTest(unittest.TestCase):
     """Tests prometheus_speedtest.SpeedtestCollector."""
 
     _results = collections.namedtuple(
-        'Results',
+        '_results',
         ['download', 'upload', 'ping', 'bytes_received', 'bytes_sent'])
 
     @staticmethod

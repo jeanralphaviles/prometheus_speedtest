@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 """Instrument speedtest.net speedtests from Prometheus."""
 
+from collections.abc import Generator
+from collections.abc import Sequence
 from typing import Optional
-from typing import Sequence
 from http import server
 from urllib.parse import urlparse
 import os
@@ -13,7 +14,7 @@ from absl import flags
 from absl import logging
 from prometheus_client import core
 import prometheus_client
-import speedtest
+import speedtest  # type: ignore
 
 from prometheus_speedtest import version
 
@@ -87,7 +88,7 @@ class SpeedtestCollector():
         self._tester = tester if tester else PrometheusSpeedtest(
             servers=servers, excludes=excludes)
 
-    def collect(self) -> core.Metric:
+    def collect(self) -> Generator[core.Metric]:
         """Performs a Speedtests and yields metrics.
 
         Yields:

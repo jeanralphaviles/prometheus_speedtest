@@ -42,9 +42,9 @@ repos:
         entry: pylint
         language: system
         types: [python]
-      - id: pytype
-        name: pytype
-        entry: pytype
+      - id: mypy
+        name: mypy
+        entry: mypy
         args: []
         language: system
         types: [python]
