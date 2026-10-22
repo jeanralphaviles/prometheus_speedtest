@@ -46,6 +46,7 @@ repos:
         entry: mypy
         args: []
         language: system
+        require_serial: true
         types: [python]
       - id: mdl
         name: mdl
